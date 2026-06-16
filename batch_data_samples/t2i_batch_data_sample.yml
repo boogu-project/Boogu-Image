@@ -1,0 +1,7 @@
+data:
+  instructions: [
+    "Create an image of a British Shorthair cat with a cold color palette. The cat should have a dense, plush coat in a light gray shade, with subtle white highlights on its chest and face. Its fur texture appears soft and slightly fluffy. The cat's eyes are large, round, and a striking golden-yellow, with a focused gaze directed straight at the viewer. The nose is small and pink, surrounded by delicate white whiskers that extend outward. The ears are upright and pointed, with visible inner ear details. The lighting is soft and diffused, casting gentle shadows that enhance the cat's facial features without creating harsh contrasts. The background is blurred, featuring neutral tones that complement the cat's fur, ensuring the focus remains on the animal. The overall composition emphasizes the cat's serene expression and elegant posture, capturing a moment of calmness and stillness.",    
+    "A happy dog running through a green grassy park under the sunny sky, with trees in the background and motion blur capturing its movement.",  
+  ]
+
+  input_image_paths:

@@ -1,0 +1,93 @@
+<svg viewBox="0 0 800 380" xmlns="http://www.w3.org/2000/svg" font-family="'Segoe UI', system-ui, -apple-system, sans-serif">
+  <defs>
+    <linearGradient id="arenaBooguGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd8ae"/>
+      <stop offset="0.55" stop-color="#5fae86"/>
+      <stop offset="1" stop-color="#3f7f63"/>
+    </linearGradient>
+    <linearGradient id="arenaOpenGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8c7a9"/>
+      <stop offset="0.58" stop-color="#7a9b7e"/>
+      <stop offset="1" stop-color="#546d58"/>
+    </linearGradient>
+    <linearGradient id="arenaClosedGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8b8c8"/>
+      <stop offset="0.55" stop-color="#8194a6"/>
+      <stop offset="1" stop-color="#566879"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="0" y="0" width="800" height="380" rx="14" fill="#fdfbf7"/>
+  <text x="55" y="28" fill="#1a120e" font-size="15" font-weight="800">Boogu Arena &#8212; ELO Leaderboard</text>
+
+  <!-- y axis -->
+  <line x1="55" y1="48" x2="55" y2="300" stroke="rgba(0,0,0,0.18)" stroke-width="1"/>
+  <!-- gridlines -->
+  <line x1="55" y1="300" x2="770" y2="300" stroke="rgba(0,0,0,0.12)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="55" y1="229" x2="770" y2="229" stroke="rgba(0,0,0,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="55" y1="157" x2="770" y2="157" stroke="rgba(0,0,0,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="55" y1="86"  x2="770" y2="86"  stroke="rgba(0,0,0,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
+  <!-- y labels -->
+  <text x="49" y="303" fill="#6b6560" font-size="9" text-anchor="end">0</text>
+  <text x="49" y="232" fill="#6b6560" font-size="9" text-anchor="end">400</text>
+  <text x="49" y="160" fill="#6b6560" font-size="9" text-anchor="end">800</text>
+  <text x="49" y="89"  fill="#6b6560" font-size="9" text-anchor="end">1200</text>
+
+  <!-- GPT Image 2 -->
+  <rect x="77" y="83" width="22" height="217" rx="3" fill="url(#arenaClosedGradient)"/>
+  <text x="88" y="78" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">1217</text>
+  <text transform="translate(88,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">GPT Image 2</text>
+
+  <!-- Nano Banana Pro -->
+  <rect x="151" y="105" width="22" height="195" rx="3" fill="url(#arenaClosedGradient)"/>
+  <text x="162" y="100" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">1094</text>
+  <text transform="translate(162,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">Nano Banana Pro</text>
+
+  <!-- Boogu-Image-0.1-Turbo-Thinking -->
+  <rect x="225" y="112" width="22" height="188" rx="3" fill="url(#arenaBooguGradient)"/>
+  <text x="236" y="107" text-anchor="middle" fill="#2f7d57" font-size="9" font-weight="800">1054</text>
+  <text transform="translate(236,307) rotate(-60)" text-anchor="end" fill="#2f7d57" font-size="9" font-weight="700">Boogu-Image-0.1-Turbo-Thinking</text>
+
+  <!-- Seedream-5.0-Lite -->
+  <rect x="299" y="114" width="22" height="186" rx="3" fill="url(#arenaClosedGradient)"/>
+  <text x="310" y="109" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">1035</text>
+  <text transform="translate(310,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">Seedream-5.0-Lite</text>
+
+  <!-- Boogu-Image-0.1-Turbo -->
+  <rect x="373" y="121" width="22" height="179" rx="3" fill="url(#arenaBooguGradient)"/>
+  <text x="384" y="116" text-anchor="middle" fill="#2f7d57" font-size="9" font-weight="800">1006</text>
+  <text transform="translate(384,307) rotate(-60)" text-anchor="end" fill="#2f7d57" font-size="9" font-weight="700">Boogu-Image-0.1-Turbo</text>
+
+  <!-- Qwen-Image-2512 -->
+  <rect x="447" y="125" width="22" height="175" rx="3" fill="url(#arenaOpenGradient)"/>
+  <text x="458" y="120" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">981</text>
+  <text transform="translate(458,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">Qwen-Image-2512</text>
+
+  <!-- Z-Image-Turbo -->
+  <rect x="521" y="128" width="22" height="172" rx="3" fill="url(#arenaOpenGradient)"/>
+  <text x="532" y="123" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">964</text>
+  <text transform="translate(532,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">Z-Image-Turbo</text>
+
+  <!-- Qwen-Image-2.0 -->
+  <rect x="595" y="134" width="22" height="166" rx="3" fill="url(#arenaClosedGradient)"/>
+  <text x="606" y="129" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">933</text>
+  <text transform="translate(606,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">Qwen-Image-2.0</text>
+
+  <!-- HiDream O1 Image -->
+  <rect x="669" y="146" width="22" height="154" rx="3" fill="url(#arenaOpenGradient)"/>
+  <text x="680" y="141" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">860</text>
+  <text transform="translate(680,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">HiDream O1 Image</text>
+
+  <!-- HiDream O1 Image 1.5 -->
+  <rect x="743" y="148" width="22" height="152" rx="3" fill="url(#arenaClosedGradient)"/>
+  <text x="754" y="143" text-anchor="middle" fill="#1a120e" font-size="9" font-weight="700">858</text>
+  <text transform="translate(754,307) rotate(-60)" text-anchor="end" fill="#555" font-size="9">HiDream O1 Image 1.5</text>
+
+  <!-- legend -->
+  <rect x="55"  y="356" width="12" height="12" rx="2" fill="#5fae86"/>
+  <text x="73"  y="366" fill="#555" font-size="10">Boogu variants (open-source)</text>
+  <rect x="285" y="356" width="12" height="12" rx="2" fill="#7a9b7e"/>
+  <text x="303" y="366" fill="#555" font-size="10">Open-source</text>
+  <rect x="420" y="356" width="12" height="12" rx="2" fill="#8194a6"/>
+  <text x="438" y="366" fill="#555" font-size="10">Closed-source</text>
+</svg>

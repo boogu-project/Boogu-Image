@@ -1,0 +1,91 @@
+<svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Boogu Arena leaderboard</title>
+  <desc id="desc">Arena-style preference leaderboard comparing Boogu variants with open-source and closed-source image generation models.</desc>
+  <defs>
+    <linearGradient id="arenaBooguGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8fd8ae"/>
+      <stop offset="0.55" stop-color="#5fae86"/>
+      <stop offset="1" stop-color="#3f7f63"/>
+    </linearGradient>
+    <linearGradient id="arenaOpenGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8c7a9"/>
+      <stop offset="0.58" stop-color="#7a9b7e"/>
+      <stop offset="1" stop-color="#546d58"/>
+    </linearGradient>
+    <linearGradient id="arenaClosedGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#a8b8c8"/>
+      <stop offset="0.55" stop-color="#8194a6"/>
+      <stop offset="1" stop-color="#566879"/>
+    </linearGradient>
+  </defs>
+
+  <g font-family="'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif">
+    <text x="55" y="31" fill="#f3eee7" font-size="18" font-weight="850">Boogu Arena</text>
+    <text x="400" y="30" text-anchor="middle" fill="#a89f96" font-size="10" font-weight="600">Arena-style preference score</text>
+
+    <line x1="55" y1="18" x2="55" y2="270" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <line x1="55" y1="270" x2="770" y2="270" stroke="rgba(255,255,255,0.08)" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="55" y1="199" x2="770" y2="199" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="55" y1="127" x2="770" y2="127" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+    <line x1="55" y1="56" x2="770" y2="56" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="3,3"/>
+
+    <text x="49" y="273" fill="#6b6560" font-size="9" text-anchor="end">0</text>
+    <text x="49" y="202" fill="#6b6560" font-size="9" text-anchor="end">400</text>
+    <text x="49" y="130" fill="#6b6560" font-size="9" text-anchor="end">800</text>
+    <text x="49" y="59" fill="#6b6560" font-size="9" text-anchor="end">1200</text>
+    <line x1="55" y1="270" x2="770" y2="270" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+
+    <rect x="77" y="57" width="22" height="213" rx="3" fill="url(#arenaClosedGradient)"/>
+    <text x="88" y="52" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">1196</text>
+    <text transform="translate(88,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">GPT Image 2</text>
+
+    <rect x="151" y="76" width="22" height="194" rx="3" fill="url(#arenaClosedGradient)"/>
+    <text x="162" y="71" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">1088</text>
+    <text transform="translate(162,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">Nano Banana Pro</text>
+
+    <rect x="225" y="83" width="22" height="187" rx="3" fill="url(#arenaBooguGradient)"/>
+    <text x="236" y="78" text-anchor="middle" fill="#8fd8ae" font-size="8" font-weight="700">1048</text>
+    <text transform="translate(236,277) rotate(-60)" text-anchor="end" fill="#5fae86" font-size="8" font-weight="700">Boogu-Image-0.1-Turbo-Thinking</text>
+
+    <rect x="299" y="86" width="22" height="184" rx="3" fill="url(#arenaClosedGradient)"/>
+    <text x="310" y="81" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">1032</text>
+    <text transform="translate(310,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">Seedream-5.0-Lite</text>
+
+    <rect x="373" y="88" width="22" height="182" rx="3" fill="url(#arenaBooguGradient)"/>
+    <text x="384" y="83" text-anchor="middle" fill="#8fd8ae" font-size="8" font-weight="700">1021</text>
+    <text transform="translate(384,277) rotate(-60)" text-anchor="end" fill="#5fae86" font-size="8" font-weight="700">Boogu-Image-0.1-Turbo</text>
+
+    <rect x="447" y="94" width="22" height="176" rx="3" fill="url(#arenaOpenGradient)"/>
+    <text x="458" y="89" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">987</text>
+    <text transform="translate(458,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">Qwen-Image-2512</text>
+
+    <rect x="521" y="99" width="22" height="171" rx="3" fill="url(#arenaOpenGradient)"/>
+    <text x="532" y="94" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">961</text>
+    <text transform="translate(532,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">Z-Image-Turbo</text>
+
+    <rect x="595" y="102" width="22" height="168" rx="3" fill="url(#arenaClosedGradient)"/>
+    <text x="606" y="97" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">945</text>
+    <text transform="translate(606,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">Qwen-Image-2.0</text>
+
+    <rect x="669" y="115" width="22" height="155" rx="3" fill="url(#arenaOpenGradient)"/>
+    <text x="680" y="110" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">868</text>
+    <text transform="translate(680,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">HiDream O1 Image</text>
+
+    <rect x="743" y="117" width="22" height="153" rx="3" fill="url(#arenaClosedGradient)"/>
+    <text x="754" y="112" text-anchor="middle" fill="#d8d0c8" font-size="8" font-weight="700">856</text>
+    <text transform="translate(754,277) rotate(-60)" text-anchor="end" fill="#a89f96" font-size="8">HiDream O1 Image 1.5</text>
+
+    <g font-size="10" font-weight="650">
+      <rect x="562" y="20" width="190" height="62" rx="12" fill="#17130f" fill-opacity="0.82" stroke="rgba(255,255,255,0.08)"/>
+
+      <rect x="578" y="33" width="10" height="10" rx="2" fill="#5fae86"/>
+      <text x="595" y="42" fill="#d8d0c8">Boogu variants</text>
+
+      <rect x="578" y="50" width="10" height="10" rx="2" fill="#7a9b7e"/>
+      <text x="595" y="59" fill="#d8d0c8">Open-source</text>
+
+      <rect x="578" y="67" width="10" height="10" rx="2" fill="#8194a6"/>
+      <text x="595" y="76" fill="#d8d0c8">Closed-source</text>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+data:
+  instructions: [
+    "Remove the animal in the image, ensuring that the background remains intact and the area where the animal was is seamlessly blended with the surrounding environment.",    
+    "Change the color of the vehicle to blue.",
+  ]
+
+  input_image_paths: [
+    ["./input_image_examples/03.jpg"],
+    ["./input_image_examples/04.jpg"],
+  ]

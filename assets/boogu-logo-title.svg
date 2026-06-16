@@ -1,0 +1,30 @@
+<svg width="1320" height="240" viewBox="0 0 1320 240" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Boogu-Image-0.1</title>
+  <desc id="desc">Boogu infinity logo with Boogu-Image-0.1 title text.</desc>
+  <defs>
+    <linearGradient id="booguMarkGradient" x1="76" y1="82" x2="244" y2="158" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f1b37a"/>
+      <stop offset="0.42" stop-color="#d97745"/>
+      <stop offset="1" stop-color="#a93b3b"/>
+    </linearGradient>
+    <linearGradient id="booguTextGradient" x1="278" y1="73" x2="1070" y2="166" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f1b37a"/>
+      <stop offset="0.48" stop-color="#a93b3b"/>
+      <stop offset="1" stop-color="#d9964a"/>
+    </linearGradient>
+  </defs>
+
+  <path
+    d="M82 120C82 78.5 132 78.5 160 120C188 161.5 238 161.5 238 120C238 78.5 188 78.5 160 120C132 161.5 82 161.5 82 120Z"
+    stroke="url(#booguMarkGradient)"
+    stroke-width="30"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+
+  <g>
+    <text x="304" y="162" fill="url(#booguTextGradient)" font-family="'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="114" font-weight="850" letter-spacing="-3">
+      Boogu-Image-0.1
+    </text>
+  </g>
+</svg>
