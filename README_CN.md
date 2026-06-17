@@ -39,7 +39,7 @@
 
 ## 🏆 Boogu Arena
 
-由于我们无法直接在 LM Arena 上评测，我们构建了 **Boogu Arena**——一套 LM Arena 风格的偏好评测。我们使用 LLM 生成多样化的用户画像（persona），再让每个画像产出图像生成提示词，共得到 **1K+ 条测试提示词**，并将公开发布以供社区复现。下方的 ELO 排行榜涵盖了领先的闭源与开源系统。
+由于我们无法直接在 LM Arena 上评测，我们构建了 **Boogu Arena**——一套 LM Arena 风格的偏好评测。我们使用 LLM 生成多样化的用户画像（persona），再让每个画像产出图像生成提示词，共得到 **1K+ 条测试提示词**，并将公开发布以供社区复现。下方的 ELO 排行榜涵盖了领先的闭源与开源系统。我们欢迎对结果有疑问的团队与我们联系，以便我们能够努力实现更加客观、公平和可重复的评估。
 
 <!-- <p align="center">
   <img src="assets/ci_chart.svg" alt="Boogu Arena ELO 排行榜" width="100%" />
