@@ -52,9 +52,9 @@ Since we could not evaluate on LM Arena directly, we built **Boogu Arena**, an L
 - 📸 **Beautiful and Precise Photography** — Accurately understands photography prompts and generates high-quality images with natural lighting, coherent composition, and faithful details, preserving coherent subject, background, and spatial relationships even in complex real-world scenes
 ![Showcase for Photography](assets/photography_triptych.png)
 - 📝 **Diverse and Stable Text Rendering** — Supports a wide range of text-heavy designs — posters, stamps, documents, interfaces, brand guides, and handwritten boards — with readable structure, stable typography, and robust bilingual (Chinese/English) rendering across diverse layouts
-- ![Showcase for Photography](assets/text_rendering_triptych.png)
+![Showcase for Photography](assets/text_rendering_triptych.png)
 - 🎨 **Diverse and Beautiful Stylization** — Handles stylized generation across miniature 3D scenes, Chinese-inspired gilded aesthetics, shining fantasy visuals, anime portraits, and mythic character art — not just style transfer, but stable, attractive, and prompt-aware creative generation
-- ![Showcase for Photography](assets/stylization_triptych.png)
+![Showcase for Photography](assets/stylization_triptych.png)
 - 📊 **Competitive General Performance** — Demonstrates competitive performance across many scenarios and benchmarks, with the Boogu-Image-0.1 family ranking among the very top of evaluated open- and closed-source systems in Boogu Arena
 
 > 📖 For the full set of practical lessons and an honest account of current limitations, see [Responsible AI & Limitations](#-responsible-ai--limitations) below.
