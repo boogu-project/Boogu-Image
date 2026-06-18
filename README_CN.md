@@ -46,7 +46,7 @@
   <img src="assets/ci_chart.svg" alt="Boogu Arena ELO 排行榜" width="100%" />
 </p> -->
 <p align="center">
-  <img src="assets/arena_elo_chart.svg" alt="Boogu Arena ELO Leaderboard" width="100%" />
+  <img src="assets/boogu_combined.svg" alt="Boogu Arena ELO Leaderboard" width="100%" />
 </p>
 
 ## ✨ 亮点
