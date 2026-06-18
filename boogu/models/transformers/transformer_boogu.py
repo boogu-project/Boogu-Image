@@ -47,7 +47,10 @@ from .block_lumina2 import (
     LuminaLayerNormContinuous,
     LuminaRMSNormZero,
 )
-from .rope import BooguImageDoubleStreamRotaryPosEmbed, BooguImagePromptTuningRotaryPosEmbed
+from .rope import (
+    BooguImageDoubleStreamRotaryPosEmbed,
+    BooguImagePromptTuningRotaryPosEmbed,
+)
 
 if is_triton_available() and ("cuda" in os.getenv("device", "cpu")):
     from ...ops.triton.layer_norm import RMSNorm
@@ -371,6 +374,22 @@ class BooguImageTransformerBlock(nn.Module):
                 hidden_states = hidden_states + self.ffn_norm2(mlp_output)
 
         return hidden_states
+
+
+class BooguImageNoiseRefinerTransformerBlock(BooguImageTransformerBlock):
+    pass
+
+
+class BooguImageRefImgRefinerTransformerBlock(BooguImageTransformerBlock):
+    pass
+
+
+class BooguImageContextRefinerTransformerBlock(BooguImageTransformerBlock):
+    pass
+
+
+class BooguImageSingleStreamTransformerBlock(BooguImageTransformerBlock):
+    pass
 
 
 class BooguImageDoubleStreamTransformerBlock(nn.Module):
@@ -751,9 +770,6 @@ class BooguImageDoubleStreamTransformerBlock(nn.Module):
         return img_hidden_states, instruct_hidden_states
 
 
-BooguImageSingleStreamTransformerBlock = BooguImageTransformerBlock
-
-
 class BooguImageTransformer2DModel(
     ModelMixin, ConfigMixin, PeftAdapterMixin, FromOriginalModelMixin
 ):
@@ -766,15 +782,20 @@ class BooguImageTransformer2DModel(
     _supports_gradient_checkpointing = True
     _no_split_modules = [
         "BooguImageTransformerBlock",
+        "BooguImageNoiseRefinerTransformerBlock",
+        "BooguImageRefImgRefinerTransformerBlock",
+        "BooguImageContextRefinerTransformerBlock",
         "BooguImageSingleStreamTransformerBlock",
         "BooguImageDoubleStreamTransformerBlock",
         "PromptEmbedding",
         "nn.Embedding",
     ]
+    # Noise refiner, reference image refiner, and double stream layers
+    # are kept out of regional torch.compile for numerical stability.
     _repeated_blocks = [
         "BooguImageTransformerBlock",
+        "BooguImageContextRefinerTransformerBlock",
         "BooguImageSingleStreamTransformerBlock",
-        "BooguImageDoubleStreamTransformerBlock",
     ]
     _skip_layerwise_casting_patterns = ["x_embedder", "norm", "embedding"]
 
@@ -857,7 +878,7 @@ class BooguImageTransformer2DModel(
         # Refiner layers.
         self.noise_refiner = nn.ModuleList(
             [
-                BooguImageTransformerBlock(
+                BooguImageNoiseRefinerTransformerBlock(
                     hidden_size,
                     num_attention_heads,
                     num_kv_heads,
@@ -872,7 +893,7 @@ class BooguImageTransformer2DModel(
 
         self.ref_image_refiner = nn.ModuleList(
             [
-                BooguImageTransformerBlock(
+                BooguImageRefImgRefinerTransformerBlock(
                     hidden_size,
                     num_attention_heads,
                     num_kv_heads,
@@ -887,7 +908,7 @@ class BooguImageTransformer2DModel(
 
         self.context_refiner = nn.ModuleList(
             [
-                BooguImageTransformerBlock(
+                BooguImageContextRefinerTransformerBlock(
                     hidden_size,
                     num_attention_heads,
                     num_kv_heads,
