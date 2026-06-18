@@ -16,7 +16,7 @@
 [![Hugging Face](https://img.shields.io/badge/🤗-Hugging%20Face-yellow)](https://huggingface.co/Boogu)
 [![GitHub](https://img.shields.io/badge/GitHub-Repo-181717?logo=github&logoColor=white)](https://github.com/boogu-project/Boogu-Image)
 [![ModelScope](https://img.shields.io/badge/🤖-ModelScope-624aff)](https://modelscope.cn/organization/Boogu)
-[![ModelScope](https://img.shields.io/badge/⛰️-Gallery)](https://boogu-gallery.netlify.app/)
+[![ModelScope](https://img.shields.io/badge/⛰️-Gallery-green)](https://boogu-gallery.netlify.app/)
 
 [![Demo-Base](https://img.shields.io/badge/🎨-Demo%20Base-ff69b4)](http://demo-base.boogu.org/)
 [![Demo-Edit](https://img.shields.io/badge/🖌️-Demo%20Edit-ff8c00)](http://demo-edit.boogu.org/)
