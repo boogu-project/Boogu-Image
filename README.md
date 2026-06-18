@@ -46,7 +46,7 @@ Since we could not evaluate on LM Arena directly, we built **Boogu Arena**, an L
   <img src="assets/ci_chart.svg" alt="Boogu Arena ELO Leaderboard" width="100%" />
 </p> -->
 <p align="center">
-  <img src="assets/boogu_combined.pdf" alt="Boogu Arena ELO Leaderboard" width="100%" />
+  <img src="assets/boogu_combined.svg" alt="Boogu Arena ELO Leaderboard" width="100%" />
 </p>
 
 ## ✨ Highlights
