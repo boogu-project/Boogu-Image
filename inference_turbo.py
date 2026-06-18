@@ -724,6 +724,26 @@ def load_llm_or_vlm(
     return cus_mod
 
 
+def _disable_deepgemm_for_fp8_vlm() -> None:
+    # For transformers >= 5.11.0
+    os.environ["TRANSFORMERS_DISABLE_DEEPGEMM_LINEAR"] = "1"
+
+    try:
+        import transformers.integrations.finegrained_fp8 as fg_fp8
+    except ImportError:
+        return
+
+    def _raise_import_error(*args, **kwargs):
+        raise ImportError("DeepGEMM disabled; forcing Triton finegrained-fp8 fallback.")
+
+    if hasattr(fg_fp8, "deepgemm_fp8_fp4_linear"):
+        # For 5.10.1 <= transformers < 5.11.0
+        fg_fp8.deepgemm_fp8_fp4_linear = _raise_import_error
+    elif hasattr(fg_fp8, "_load_deepgemm_kernel"):
+        # For 5.5.0 <=transoformers < 5.10.1
+        fg_fp8._load_deepgemm_kernel = _raise_import_error
+
+
 def load_pipeline(
     args: argparse.Namespace, weight_dtype: torch.dtype
 ) -> BooguImagePipeline:
@@ -747,7 +767,7 @@ def load_pipeline(
             )
 
             # Use Triton finegrained-fp8 kernel for better compatibility.
-            os.environ["TRANSFORMERS_DISABLE_DEEPGEMM_LINEAR"] = "1"
+            _disable_deepgemm_for_fp8_vlm()
 
             # Need to load the fp8 transformer weights separately, because they are not in the safetensors format.
             print(
