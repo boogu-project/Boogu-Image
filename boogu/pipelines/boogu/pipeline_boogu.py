@@ -3701,19 +3701,13 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
 
         batch_size, num_channels_latents, height, width = latents.shape
 
-        optional_kwargs = {}
-        if "ref_image_hidden_states" in set(
-            inspect.signature(self.transformer.forward).parameters.keys()
-        ):
-            optional_kwargs["ref_image_hidden_states"] = ref_image_hidden_states
-
         model_pred = self.transformer(
             latents,
             timestep,
             instruction_embeds,
             freqs_cis,
             instruction_attention_mask,
-            **optional_kwargs,
+            ref_image_hidden_states=ref_image_hidden_states,
         )
         return model_pred
 
