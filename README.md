@@ -44,6 +44,17 @@ English | [中文](./README_CN.md)
 
 This repository provides checkpoints and inference code for **Boogu-Image-0.1**.
 
+## 📣 News
+- **2026-06-XX** 🧊 **Boogu-Image-0.1-Edit-Turbo (Image-to-Image) is coming!**
+- **2026-06-xx** 🧊 Happy Dragon Boat Festival! We have seen many community reviews and feedback, and we will continue to update the model accordingly. Due to differences in product design philosophy, the Boogu series stands apart from most existing open-source models. While other models tend to rely on reinforcement learning techniques to enhance aesthetics, Boogu focuses on using diverse data to give users more control. This is precisely why we adopt an integrated understanding-and-generation system: we need more precise instruction control. We will release a user manual in three days to help everyone make better use of the Boogu series models.
+- **2026-06-24** 🔥 [**Boogu-Image-0.1-Turbo-v2.0**](https://demo-turbo.boogu.org/) (Text-to-Image) is now online! The new checkpoint will be released tomorrow. Thanks for the feedback from the open-source community. Please report any failure cases in the GitHub Issues, and we will fix them ASAP.
+- **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://huggingface.co/Comfy-Org/Boogu-Image) powered by ComfyUI is released! Thank you, ComfyUI!
+- **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://github.com/boogu-project/ComfyUI-Boogu) is released! 
+- **2026-06-16** 🔥 **Boogu-Image-0.1-Base (Text-to-Image) is released!** The core text-to-image foundation model. Try the [online demo](http://demo-base.boogu.org/).
+- **2026-06-16** 🎨 **Boogu-Image-0.1-Edit (Image-to-Image) is released!** Image editing and transformation capabilities now available. **Note that you need to change the resolution of the reference image to 1K accordingly.** Try the [online demo](http://demo-edit.boogu.org/). **Only support 1 reference image for now. Will try our best to support more reference images. Stay tuned!** Boogu-Image-0.1-Edit on single-image editing is strong. More failure cases are welcome.
+- **2026-06-16** 🚀 **Boogu-Image-0.1-Turbo is released!** Four-step distilled variant for fast inference and photorealistic generation. Try the [online demo](http://demo-turbo.boogu.org/).
+<!-- - **[{{ 2026-06-DD }}]** 📄 **Technical report is released!** Read our findings on [arXiv](https://arxiv.org/abs/{{ paper_id }}). -->
+
 ## 🏆 Boogu Arena
 
 Since we could not evaluate on LM Arena directly, we built **Boogu Arena**, an LM Arena-style preference evaluation. We use an LLM to generate diverse user personas, then ask each persona to produce image generation prompts, resulting in **1K+ test prompts** that we will release publicly for community reproduction. The ELO leaderboard below spans leading closed- and open-source systems. **We welcome teams with questions about the results to contact us so that we can work toward a more objective, fair, and reproducible evaluation.**
@@ -87,16 +98,6 @@ Beyond overall arena rankings, we break performance down by scenario across lead
 - 📝 **Strong dense text rendering** — Boogu-Image-0.1-Base shows competitive results on dense, layout-heavy text scenarios such as posters, documents, brand guides, and complex bilingual designs.
 - 💡 **Recommendation** — When your workload is dominated by dense / ultra-dense text rendering needs, we recommend running **Boogu-Image-0.1-Base at 2K output resolution** for the best layout fidelity and character accuracy.
 
-## 📣 News
-- **2026-06-XX** 🧊 **Boogu-Image-0.1-Edit-Turbo (Image-to-Image) is coming!**
-- **2026-06-xx** 🧊 Happy Dragon Boat Festival! We have seen many community reviews and feedback, and we will continue to update the model accordingly. Due to differences in product design philosophy, the Boogu series stands apart from most existing open-source models. While other models tend to rely on reinforcement learning techniques to enhance aesthetics, Boogu focuses on using diverse data to give users more control. This is precisely why we adopt an integrated understanding-and-generation system: we need more precise instruction control. We will release a user manual in three days to help everyone make better use of the Boogu series models.
-- **2026-06-24** 🔥 [**Boogu-Image-0.1-Turbo-v2.0**](https://demo-turbo.boogu.org/) (Text-to-Image) is now online! The new checkpoint will be released tomorrow. Thanks for the feedback from the open-source community. Please report any failure cases in the GitHub Issues, and we will fix them ASAP.
-- **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://huggingface.co/Comfy-Org/Boogu-Image) powered by ComfyUI is released! Thank you, ComfyUI!
-- **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://github.com/boogu-project/ComfyUI-Boogu) is released! 
-- **2026-06-16** 🔥 **Boogu-Image-0.1-Base (Text-to-Image) is released!** The core text-to-image foundation model. Try the [online demo](http://demo-base.boogu.org/).
-- **2026-06-16** 🎨 **Boogu-Image-0.1-Edit (Image-to-Image) is released!** Image editing and transformation capabilities now available. **Note that you need to change the resolution of the reference image to 1K accordingly.** Try the [online demo](http://demo-edit.boogu.org/). **Only support 1 reference image for now. Will try our best to support more reference images. Stay tuned!** Boogu-Image-0.1-Edit on single-image editing is strong. More failure cases are welcome.
-- **2026-06-16** 🚀 **Boogu-Image-0.1-Turbo is released!** Four-step distilled variant for fast inference and photorealistic generation. Try the [online demo](http://demo-turbo.boogu.org/).
-<!-- - **[{{ 2026-06-DD }}]** 📄 **Technical report is released!** Read our findings on [arXiv](https://arxiv.org/abs/{{ paper_id }}). -->
 
 ## 📥 Model Zoo
 
