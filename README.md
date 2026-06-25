@@ -270,6 +270,17 @@ Downstream users are responsible for applying content moderation, validation, an
 
 Closed-source systems such as [GPT-Image](https://openai.com/index/introducing-chatgpt-images-2-0/), [Nano Banana](https://gemini.google/overview/image-generation/), and the [Seedream](https://seed.bytedance.com/en/seedream5_0_lite) series helped us understand the frontier capabilities and practical boundaries of unified understanding-and-generation systems. We thank the [Qwen-Image](https://github.com/QwenLM/Qwen-Image), [Z-Image](https://github.com/Tongyi-MAI/Z-Image), [OmniGen2](https://github.com/VectorSpaceLab/OmniGen2), [FLUX](https://github.com/black-forest-labs/flux), [Lumina-Image-2.0](https://github.com/Alpha-VLLM/Lumina-Image-2.0) and broader open-source communities for the foundations they provide, and [DeepSeek](https://www.deepseek.com) for strong open-source understanding models that support open-source unified multimodal systems.
 
+## 📚 Cite this work
+
+```bibtex
+@misc{boogu-image-2026,
+  author       = {Boogu Team},
+  title        = {{Boogu-Image-0.1}},
+  year         = {2026},
+  howpublished = {\url{https://github.com/BOOGU-Project/Boogu-Image}},
+}
+```
+
 
 ## 📄 License
 
