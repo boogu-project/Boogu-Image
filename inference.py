@@ -144,8 +144,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--seed", type=int, default=0, help="Random seed for generation."
     )
-    parser.add_argument("--height", type=int, default=512, help="Output image height.")
-    parser.add_argument("--width", type=int, default=512, help="Output image width.")
+    parser.add_argument("--height", type=int, default=1024, help="Output image height.")
+    parser.add_argument("--width", type=int, default=1024, help="Output image width.")
     parser.add_argument(
         "--max_input_image_pixels",
         type=int,
