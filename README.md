@@ -111,10 +111,11 @@ Beyond overall arena rankings, we break performance down by scenario across lead
 | **Boogu-Image-0.1-Turbo** | 10B | + Decoupled DMD | 4 | 1.0 | T2I | [![HF](https://img.shields.io/badge/%F0%9F%A4%97-Checkpoint-yellow)](https://huggingface.co/Boogu/Boogu-Image-0.1-Turbo) | [![MS](https://img.shields.io/badge/🤖-Checkpoint-624aff)](https://modelscope.cn/models/Boogu/Boogu-Image-0.1-Turbo) | [![Demo](https://img.shields.io/badge/⚡-Demo-9b59b6)](http://demo-turbo.boogu.org/) |
 | **Boogu-Image-0.1-Turbo-fp8** | 10B | + Decoupled DMD | 4 | 1.0 | T2I | [![HF](https://img.shields.io/badge/%F0%9F%A4%97-Checkpoint-yellow)](https://huggingface.co/Boogu/Boogu-Image-0.1-Turbo-fp8) | [![MS](https://img.shields.io/badge/🤖-Checkpoint-624aff)](https://modelscope.cn/models/Boogu/Boogu-Image-0.1-Turbo-fp8) | — |
 
-- **Boogu-Image-0.1-Base**: Foundation model with strong **diversity** and **controllability** — ideal for **fine-tuning** and downstream development. Mainly intended for **ultra-dense text rendering**; for photorealism, Turbo is usually the better default.
-- **Boogu-Image-0.1-Edit**: Image editing and transformation variant.
-- **Boogu-Image-0.1-Turbo**: Distilled variant with the **same parameter count**, typically requiring only **3~4 steps**. Focuses on **high-quality generation** and photorealism while preserving bilingual text rendering and prompt adherence.
+- **Boogu-Image-0.1-Base**: Foundation model with strong **diversity** and **controllability** — ideal for **fine-tuning** and downstream development. Mainly intended for **ultra-dense text rendering**; for photorealism, Turbo is usually the better default. Supported resolutions: 1K, 1.5K, 2K.
+- **Boogu-Image-0.1-Edit**: Image editing and transformation variant. Supported resolutions: 1K, 1.5K, 2K.
+- **Boogu-Image-0.1-Turbo**: Distilled variant with the **same parameter count**, typically requiring only **3~4 steps**. Focuses on **high-quality generation** and photorealism while preserving bilingual text rendering and prompt adherence. Supported resolution: 1K.
 
+Unless otherwise specified, all model variants support the following aspect ratios: 1:1, 2:3, 3:2, 3:4, 4:3, 1:2, 2:1, 9:16, and 16:9.
 
 ## 🛠️ Installation
 

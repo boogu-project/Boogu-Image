@@ -108,10 +108,11 @@
 | **Boogu-Image-0.1-Turbo** | 10B | + 解耦 DMD | 4 | 1.0 | 文生图 | [![HF](https://img.shields.io/badge/%F0%9F%A4%97-Checkpoint-yellow)](https://huggingface.co/Boogu/Boogu-Image-0.1-Turbo) | [![MS](https://img.shields.io/badge/🤖-Checkpoint-624aff)](https://modelscope.cn/models/Boogu/Boogu-Image-0.1-Turbo) | [![Demo](https://img.shields.io/badge/⚡-Demo-9b59b6)](http://demo-turbo.boogu.org/) |
 | **Boogu-Image-0.1-Turbo-fp8** | 10B | + 解耦 DMD | 4 | 1.0 | 文生图 | [![HF](https://img.shields.io/badge/%F0%9F%A4%97-Checkpoint-yellow)](https://huggingface.co/Boogu/Boogu-Image-0.1-Turbo-fp8) | [![MS](https://img.shields.io/badge/🤖-Checkpoint-624aff)](https://modelscope.cn/models/Boogu/Boogu-Image-0.1-Turbo-fp8) | — |
 
+- **Boogu-Image-0.1-Base**：基础模型，具备强**多样性**与**可控性**——适合**微调**及下游开发。主要面向**超密集文字渲染**等复杂多文本场景；若追求照片级真实感，Turbo 模型通常是更好的选择。支持分辨率：1K、1.5K、2K。
+- **Boogu-Image-0.1-Edit**：图像编辑与转换变体。支持分辨率：1K、1.5K、2K。
+- **Boogu-Image-0.1-Turbo**：蒸馏变体，与基础模型**参数量相同**，通常仅需 **3~4 步**。专注于**高质量生成**与照片级真实感，同时保留双语文字渲染与提示词遵循能力。支持分辨率：1K。
 
-- **Boogu-Image-0.1-Base**：基础模型，具备强**多样性**与**可控性**——适合**微调**及下游开发。主要面向**超密集文字渲染**等复杂多文本场景；若追求照片级真实感，Turbo 模型通常是更好的选择。
-- **Boogu-Image-0.1-Edit**：图像编辑与转换变体。
-- **Boogu-Image-0.1-Turbo**：蒸馏变体，与基础模型**参数量相同**，通常仅需 **3~4 步**。专注于**高质量生成**与照片级真实感，同时保留双语文字渲染与提示词遵循能力。
+如无特别说明，所有模型变体均支持以下宽高比：1:1、2:3、3:2、3:4、4:3、1:2、2:1、9:16、16:9。
 
 ## 🛠️ 安装
 
