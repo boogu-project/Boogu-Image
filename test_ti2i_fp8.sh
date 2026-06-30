@@ -11,7 +11,6 @@ python inference.py \
     --input_image_paths "input_image_examples/03.jpg" \
     --instruction "把背景替换到沙滩." \
     --num_inference_steps 50 \
-    --height 1024 --width 1024 \
     --text_guidance_scale 4.0 --image_guidance_scale 1.0 \
     --output_image_path "outputs/test_ti2i_fp8/out_1.png" \
     --device "$device"

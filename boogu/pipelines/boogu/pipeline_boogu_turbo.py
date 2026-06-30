@@ -10,8 +10,8 @@ It is implemented as a thin subclass that:
   * overrides `processing(...)` to take a DMD branch when DMD inference is
     requested, otherwise delegating to the parent implementation unchanged.
 
-The DMD path is pure text-to-image: it does not use the scheduler, reference
-images, SDEdit, or classifier-free guidance. It builds its own sigma schedule,
+The DMD path supports text-to-image and reference-image editing. It does not use
+the scheduler, SDEdit, or classifier-free guidance. It builds its own sigma schedule,
 runs `predict` -> renoise per step, then decodes the latents.
 
 # Copyright (C) 2026 Boogu Team.
@@ -29,11 +29,12 @@ from .pipeline_boogu import BooguImagePipeline
 
 
 class BooguImageTurboPipeline(BooguImagePipeline):
-    """`BooguImagePipeline` plus a DMD student few-step T2I inference path.
+    """`BooguImagePipeline` plus a DMD student few-step inference path.
 
     Enable it by passing `use_dmd_student_inference=True` to `__call__`. The DMD
-    path requires pure T2I inputs and `text_guidance_scale == image_guidance_scale
-    == 1.0` with `empty_instruction_guidance_scale == 0.0` (no CFG).
+    path supports T2I and reference-image edit inputs, and requires
+    `text_guidance_scale == image_guidance_scale == 1.0` with
+    `empty_instruction_guidance_scale == 0.0` (no CFG).
     """
 
     # ------------------------------------------------------------------ #
@@ -77,6 +78,7 @@ class BooguImageTurboPipeline(BooguImagePipeline):
         instruction_embeds: torch.FloatTensor,
         freqs_cis: torch.FloatTensor,
         instruction_attention_mask: torch.Tensor,
+        ref_latents: Optional[List[Union[List[torch.FloatTensor], None]]] = None,
     ) -> torch.FloatTensor:
         model_pred = self.predict(
             t=torch.tensor(sigma, device=latents.device, dtype=latents.dtype),
@@ -84,7 +86,7 @@ class BooguImageTurboPipeline(BooguImagePipeline):
             instruction_embeds=instruction_embeds,
             freqs_cis=freqs_cis,
             instruction_attention_mask=instruction_attention_mask,
-            ref_image_hidden_states=None,
+            ref_image_hidden_states=ref_latents,
         )
 
         sigma_expanded = torch.full(
@@ -158,11 +160,6 @@ class BooguImageTurboPipeline(BooguImagePipeline):
 
         # --- DMD constraints (mirror the standalone turbo pipeline) ---
         task_type = self._get_task_type_by_ref_latents(ref_latents)
-        if task_type != "t2i":
-            raise ValueError(
-                "DMD student inference only supports pure T2I inputs "
-                f"(got task_type={task_type!r})."
-            )
         if (
             self.text_guidance_scale != 1.0
             or self.image_guidance_scale != 1.0
@@ -173,7 +170,10 @@ class BooguImageTurboPipeline(BooguImagePipeline):
                 "image_guidance_scale=1.0, and empty_instruction_guidance_scale=0.0."
             )
 
-        print("[Turbo Pipeline Processing]: DMD student few-step T2I inference.")
+        print(
+            "[Turbo Pipeline Processing]: "
+            f"DMD student few-step {task_type.upper()} inference."
+        )
 
         generator = getattr(self, "_dmd_generator", None)
         dmd_sigmas = self._build_dmd_student_sigmas(
@@ -194,6 +194,7 @@ class BooguImageTurboPipeline(BooguImagePipeline):
                     instruction_embeds=instruction_embeds,
                     freqs_cis=freqs_cis,
                     instruction_attention_mask=instruction_attention_mask,
+                    ref_latents=ref_latents,
                 ).to(dtype=dtype)
 
                 if i < num_inference_steps - 1:
