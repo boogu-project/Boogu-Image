@@ -8,8 +8,6 @@
 
 <img src="assets/boogu-infinity-teaser.png" alt="Boogu-Image-0.1 Teaser" width="100%" />
 
-
-
 <!-- ============== Badges ============== -->
 <!-- [![arXiv](https://img.shields.io/badge/arXiv-{{ paper_id }}-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/{{ paper_id }}) -->
 [![Project Page](https://img.shields.io/badge/🌐-Project%20Page-blue)](https://boogu.org)
@@ -21,6 +19,9 @@
 [![Demo-Base](https://img.shields.io/badge/🎨-Demo%20Base-ff69b4)](http://demo-base.boogu.org/)
 [![Demo-Edit](https://img.shields.io/badge/🖌️-Demo%20Edit-ff8c00)](http://demo-edit.boogu.org/)
 [![Demo-Turbo](https://img.shields.io/badge/⚡-Demo%20Turbo-9b59b6)](http://demo-turbo.boogu.org/)
+[![Demo-Edit-Turbo-1k](https://img.shields.io/badge/⚡-Demo%20Edit%20Turbo%201k-9b59b6)](https://demo-edit-turbo-1k.boogu.org/)
+[![Demo-Edit-Turbo-1k5](https://img.shields.io/badge/⚡-Demo%20Edit%20Turbo%201k5-9b59b6)](https://demo-edit-turbo-1k5.boogu.org/)
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![Paper](https://img.shields.io/badge/📄-Technical%20Report%20(Coming%20Soon)-lightgrey)]()
 
@@ -40,13 +41,14 @@ English | [中文](./README_CN.md)
 
 ## 📖 Introduction
 
-**Boogu-Image-0.1** is a competitive **Apache-2.0 open-source unified image generation and editing model family**, including **Base**, **Turbo**, **Edit**, and other variants that provide stable, practical capabilities for high-quality text-to-image generation, fast generation, image editing, and Chinese-English text rendering. Closed-source multimodal understanding and generation systems like Nano Banana Pro and GPT-Image-2 achieve remarkable performance not because of a single model, but through a highly unified suite of system capabilities. However, under training compute that is extremely limited compared with closed-source systems, we find that systematically improving a model's understanding ability, data quality, and training pipeline can still significantly improve image generation and editing performance. Specifically, compared with some existing open-source models, our training data scale is roughly one order of magnitude smaller. We hope our empirical study and open-source release will help advance the open-source ecosystem for multimodal generation and understanding.
+**Boogu-Image-0.1** is a competitive **Apache-2.0 open-source unified image generation and editing model family**, including **Base**, **Turbo**, **Edit**, and **Edit-Turbo**, and other variants that provide stable, practical capabilities for high-quality text-to-image generation, fast generation, image editing, and Chinese-English text rendering. Closed-source multimodal understanding and generation systems like Nano Banana Pro and GPT-Image-2 achieve remarkable performance not because of a single model, but through a highly unified suite of system capabilities. However, under training compute that is extremely limited compared with closed-source systems, we find that systematically improving a model's understanding ability, data quality, and training pipeline can still significantly improve image generation and editing performance. Specifically, compared with some existing open-source models, our training data scale is roughly one order of magnitude smaller. We hope our empirical study and open-source release will help advance the open-source ecosystem for multimodal generation and understanding.
 
 This repository provides checkpoints and inference code for **Boogu-Image-0.1**.
 
 ## 📣 News
-- **2026-06-XX** 🧊 **Boogu-Image-0.1-Edit-Turbo (Image-to-Image) is coming!**
-- **2026-06-xx** 🧊 Happy Dragon Boat Festival! We have seen many community reviews and feedback, and we will continue to update the model accordingly. Due to differences in product design philosophy, the Boogu series stands apart from most existing open-source models. While other models tend to rely on reinforcement learning techniques to enhance aesthetics, Boogu focuses on using diverse data to give users more control. This is precisely why we adopt an integrated understanding-and-generation system: we need more precise instruction control. We will release a user manual in three days to help everyone make better use of the Boogu series models.
+
+- **2026-06-XX** 🧊 Happy Dragon Boat Festival! We have seen many community reviews and feedback, and we will continue to update the model accordingly. Due to differences in product design philosophy, the Boogu series stands apart from most existing open-source models. While other models tend to rely on reinforcement learning techniques to enhance aesthetics, Boogu focuses on using diverse data to give users more control. This is precisely why we adopt an integrated understanding-and-generation system: we need more precise instruction control. We will release a user manual in three days to help everyone make better use of the Boogu series models.
+- **2026-06-30** 🔥 **Boogu-Image-0.1-Edit-Turbo (Image-to-Image) is released!** Four-step distilled variant of the base editing model for fast inference. Try the [online demo for 1k res](https://demo-edit-turbo-1k.boogu.org/) and [online demo for 1.5k res](https://demo-edit-turbo-1k5.boogu.org/).
 - **2026-06-25** 🔥 [**Boogu-Image-0.1-Turbo-hotfix**](https://demo-turbo.boogu.org/) (Text-to-Image) is now online! The new checkpoint is released on Huggingface in the revision [hotfix-20260625](https://huggingface.co/Boogu/Boogu-Image-0.1-Turbo/tree/hotfix-20260625). This is a minor patch release. We fixed visual artifacts appear in different aspect ratio, background overfitting artifacts, and other artifacts. Model weights are updated, no feature changes.
 - **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://huggingface.co/Comfy-Org/Boogu-Image) powered by ComfyUI is released! Thank you, ComfyUI!
 - **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://github.com/boogu-project/ComfyUI-Boogu) is released!
@@ -97,9 +99,7 @@ Beyond overall arena rankings, we break performance down by scenario across lead
 - 📝 **Strong dense text rendering** — Boogu-Image-0.1-Base shows competitive results on dense, layout-heavy text scenarios such as posters, documents, brand guides, and complex bilingual designs.
 - 💡 **Recommendation** — When your workload is dominated by dense / ultra-dense text rendering needs, we recommend running **Boogu-Image-0.1-Base at 2K output resolution** for the best layout fidelity and character accuracy.
 
-
 ## 📥 Model Zoo
-
 
 | Model | Params | Training | Steps | CFG | Task | Hugging Face | ModelScope | Demo |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
@@ -140,6 +140,7 @@ conda activate boogu
 ```
 
 ### Download Checkpoints
+
 Download the model weights into a local `models/` directory before running inference. We recommend using the official Hugging Face CLI:
 
 ```bash
@@ -151,9 +152,8 @@ huggingface-cli download Boogu/Boogu-Image-0.1-Turbo --local-dir models/Boogu-Im
 huggingface-cli download Boogu/Boogu-Image-0.1-Edit --local-dir models/Boogu-Image-0.1-Edit
 ```
 
-
-
 Example layout after download:
+
 ```
 models/
 └── Boogu-Image-0.1-Base/
@@ -172,6 +172,7 @@ Then point inference to the local path via `--model models/Boogu-Image-0.1-Base`
 This repository provides `utils/get_flash_attn.py` to automatically install a compatible `flash-attn` wheel for your environment.
 
 Requirements:
+
 - Python and PyTorch with CUDA already installed
 - Linux x86_64
 
@@ -184,7 +185,6 @@ python utils/get_flash_attn.py --build
 ```
 
 The script first searches [`mjun0812/flash-attention-prebuild-wheels`](https://github.com/mjun0812/flash-attention-prebuild-wheels), then tries official [`Dao-AILab/flash-attention`](https://github.com/Dao-AILab/flash-attention) release wheels with both cxx11abi variants, and finally falls back to source compilation via `pip install flash-attn --no-build-isolation`.
-
 
 ## 🚀 Quick Start
 
@@ -244,29 +244,34 @@ python inference.py \
 ### Known Limitations
 
 **🌍 World Knowledge Gap**
+
 - For tasks requiring rich common sense, domain knowledge, real brands or people, famous landmarks, celebrities, products, or complex contextual understanding, Boogu still has a clear gap from strong closed-source systems
 - This capability is extraordinarily expensive to measure; even Arena-style evaluation struggles to assess it fully, so existing benchmarks barely quantify this dimension and the real gap is likely larger than measured scores suggest
 
 **🖼️ Image-to-Image Consistency & In-Context Scenarios**
+
 - For editing tasks requiring strict preservation of the input subject, identity, layout, or fine details, Boogu's image-to-image consistency is still not stable enough
 - Because our image-to-image capability focuses more on photography and text-generation applications, Boogu still trails **Seedream 5.0** and **Nano Banana Pro** in some in-context generation scenarios
 
 **📝 Text Rendering Stability**
+
 - Boogu can handle many Chinese and English text scenarios, but long text, dense typography, small fonts, and complex design layouts can still produce typos, missing characters, or layout drift
 - Text rendering is currently focused on Chinese and English; other languages are not specifically optimized and may degrade noticeably
 
 **🦴 Body Structure in Complex Poses**
+
 - In multi-person interaction, occlusion, exaggerated motion, or unusual viewpoints, hands, limbs, and body structure may still become unnatural or inconsistent
 
 **👤 Small Faces & Small Limbs**
+
 - Because we use the open-source **FLUX.1 VAE**, reconstruction loss is relatively large, so details such as small faces, small limbs, eyes, and text may still show artifacts or instability
 
 **📦 Limited Release Scope**
+
 - Due to resource constraints, engineering complexity, and release boundaries, we are not able to open-source every training and system detail
 - The current open-source release aims to balance reproducibility, usability, and sustainable maintenance while providing a reliable starting point for community research and improvement
 
 Downstream users are responsible for applying content moderation, validation, and compliance checks appropriate to their use case.
-
 
 ## 🙏 Acknowledgements
 

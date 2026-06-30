@@ -8,8 +8,6 @@
 
 <img src="assets/boogu-infinity-teaser.png" alt="Boogu-Image-0.1 Teaser" width="100%" />
 
-
-
 <!-- ============== Badges ============== -->
 <!-- [![arXiv](https://img.shields.io/badge/arXiv-{{ paper_id }}-b31b1b.svg?logo=arxiv&logoColor=white)](https://arxiv.org/abs/{{ paper_id }}) -->
 [![项目主页](https://img.shields.io/badge/🌐-Project%20Page-blue)](https://boogu.org)
@@ -21,9 +19,11 @@
 [![Demo-Base](https://img.shields.io/badge/🎨-Demo%20Base-ff69b4)](http://demo-base.boogu.org/)
 [![Demo-Edit](https://img.shields.io/badge/🖌️-Demo%20Edit-ff8c00)](http://demo-edit.boogu.org/)
 [![Demo-Turbo](https://img.shields.io/badge/⚡-Demo%20Turbo-9b59b6)](http://demo-turbo.boogu.org/)
+[![Demo-Edit-Turbo-1k](https://img.shields.io/badge/⚡-Demo%20Edit%20Turbo%201k-9b59b6)](https://demo-edit-turbo-1k.boogu.org/)
+[![Demo-Edit-Turbo-1k5](https://img.shields.io/badge/⚡-Demo%20Edit%20Turbo%201k5-9b59b6)](https://demo-edit-turbo-1k5.boogu.org/)
+
 [![License](https://img.shields.io/badge/License-Apache%202.0-green.svg)](LICENSE)
 [![技术报告](https://img.shields.io/badge/📄-Technical%20Report%20(Coming%20Soon)-lightgrey)]()
-
 
 欢迎来到 **Boogu-Image-0.1** 官方仓库！
 
@@ -41,19 +41,20 @@
 
 ## 📖 简介
 
-**Boogu-Image-0.1** 是一个在当前开源模型中具备强竞争力的 **Apache-2.0 开源统一图像生成与编辑模型家族**，包含 **Base**、**Turbo**、**Edit** 等多个变体，在高质量文生图、快速生成、图像编辑和中英文文字渲染等任务上提供稳定实用的能力。像 Nano Banana Pro 和 GPT-Image-2 这样的闭源多模态理解与生成系统之所以表现卓越，并非依赖单一模型，而是得益于一整套高度统一的系统能力。然而，在训练资源相较于闭源模型极端有限的条件下，我们发现，通过系统性地增强模型的理解能力、数据质量和训练流程，仍然能够显著提升图像生成与编辑的性能。具体而言，相比其他已知的开源工作，我们使用的训练数据规模大约少一个数量级。我们希望这项经验研究与开源发布，能够推动多模态生成与理解领域的开源生态发展。
+**Boogu-Image-0.1** 是一个在当前开源模型中具备强竞争力的 **Apache-2.0 开源统一图像生成与编辑模型家族**，包含 **Base**、**Turbo**、**Edit**、**Edit-Turbo** 等多个变体，在高质量文生图、快速生成、图像编辑和中英文文字渲染等任务上提供稳定实用的能力。像 Nano Banana Pro 和 GPT-Image-2 这样的闭源多模态理解与生成系统之所以表现卓越，并非依赖单一模型，而是得益于一整套高度统一的系统能力。然而，在训练资源相较于闭源模型极端有限的条件下，我们发现，通过系统性地增强模型的理解能力、数据质量和训练流程，仍然能够显著提升图像生成与编辑的性能。具体而言，相比其他已知的开源工作，我们使用的训练数据规模大约少一个数量级。我们希望这项经验研究与开源发布，能够推动多模态生成与理解领域的开源生态发展。
 
 本仓库提供 **Boogu-Image-0.1** 的模型权重和推理代码。
 
 ## 📣 最新动态
-- **2026-06-XX** 🧊 **Boogu-Image-0.1-Edit-Turbo (图生图) 即将发布!**
-- **2026-06-xx** 🧊 端午安康！我们已经看到许多来自社区的评测和反馈，并将继续据此更新模型。由于设计理念上的差异，Boogu 系列与现有大多数开源模型有所不同。其他模型往往依赖强化学习技术来提升美感，而 Boogu 更注重通过多样化数据赋予用户更强的控制能力。这也正是我们采用理解与生成一体化系统的原因：我们需要更精确的指令控制。我们将在三天后发布用户手册，帮助大家更好地使用 Boogu 系列模型。
+
+- **2026-06-XX** 🧊 端午安康！我们已经看到许多来自社区的评测和反馈，并将继续据此更新模型。由于设计理念上的差异，Boogu 系列与现有大多数开源模型有所不同。其他模型往往依赖强化学习技术来提升美感，而 Boogu 更注重通过多样化数据赋予用户更强的控制能力。这也正是我们采用理解与生成一体化系统的原因：我们需要更精确的指令控制。我们将在三天后发布用户手册，帮助大家更好地使用 Boogu 系列模型。
+- **2026-06-30** 🔥 **Boogu-Image-0.1-Edit-Turbo（图生图）发布！** 这是基础编辑模型的四步蒸馏版本。体验 [1K 分辨率在线演示](https://demo-edit-turbo-1k.boogu.org/) and [1.5K 分辨率在线演示](https://demo-edit-turbo-1k5.boogu.org/)。
 - **2026-06-25** 🔥 [**Boogu-Image-0.1-Turbo-hotfix**](https://demo-turbo.boogu.org/)（文生图）现已上线！新的检查点已在 Hugging Face 的 revision [hotfix-20260625](https://huggingface.co/Boogu/Boogu-Image-0.1-Turbo/tree/hotfix-20260625) 中发布。这是一个小型补丁版本，我们修复了在不同宽高比下出现的视觉伪影、背景过拟合伪影及其他伪影。模型权重已更新，模型功能无变化。
 - **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://huggingface.co/Comfy-Org/Boogu-Image) 由 ComfyUI 提供支持的版本已发布！感谢 ComfyUI！
 - **2026-06-17** 🔥 [**ComfyUI-Boogu**](https://github.com/boogu-project/ComfyUI-Boogu) 发布!
-- **2026-06-16** 🔥 **Boogu-Image-0.1-Base（文生图）发布！** 核心文生图基础模型。体验[在线演示](http://demo-base.boogu.org/)。
-- **2026-06-16** 🎨 **Boogu-Image-0.1-Edit（图生图）发布！** 图像编辑和转换能力现已可用。**模型支持最高 2K 分辨率的图像输入与输出，但在 1K 分辨率下的生成效果更为稳定。** 体验[在线演示](http://demo-edit.boogu.org/)。**目前仅支持 1 张参考图像。我们会尽力支持更多参考图像，敬请期待！** Boogu-Image-0.1-Edit 在单图编辑方面表现强劲。欢迎提供更多失败案例。
-- **2026-06-16** 🚀 **Boogu-Image-0.1-Turbo 发布！** 用于快速推理与照片级真实感生成的 4 步蒸馏变体。体验[在线演示](http://demo-turbo.boogu.org/)。
+- **2026-06-16** 🔥 **Boogu-Image-0.1-Base（文生图）发布！** 核心文生图基础模型。体验 [在线演示](http://demo-base.boogu.org/)。
+- **2026-06-16** 🎨 **Boogu-Image-0.1-Edit（图生图）发布！** 图像编辑和转换能力现已可用。**模型支持最高 2K 分辨率的图像输入与输出，但在 1K 分辨率下的生成效果更为稳定。** 体验 [在线演示](http://demo-edit.boogu.org/)。**目前仅支持 1 张参考图像。我们会尽力支持更多参考图像，敬请期待！** Boogu-Image-0.1-Edit 在单图编辑方面表现强劲。欢迎提供更多失败案例。
+- **2026-06-16** 🚀 **Boogu-Image-0.1-Turbo 发布！** 用于快速推理与照片级真实感生成的 4 步蒸馏变体。体验 [在线演示](http://demo-turbo.boogu.org/)。
 <!-- - **[{{ 2026-06-DD }}]** 📄 **技术报告发布！** 阅读我们在 [arXiv](https://arxiv.org/abs/{{ paper_id }}) 上的发现。 -->
 
 ## 🏆 Boogu Arena
@@ -139,6 +140,7 @@ conda activate boogu
 ```
 
 ### 下载模型权重
+
 在运行推理之前，请将模型权重下载到本地 `models/` 目录。我们推荐使用 Hugging Face 官方 CLI：
 
 ```bash
@@ -149,8 +151,6 @@ huggingface-cli download Boogu/Boogu-Image-0.1-Base --local-dir models/Boogu-Ima
 huggingface-cli download Boogu/Boogu-Image-0.1-Turbo --local-dir models/Boogu-Image-0.1-Turbo
 huggingface-cli download Boogu/Boogu-Image-0.1-Edit --local-dir models/Boogu-Image-0.1-Edit
 ```
-
-
 
 下载后的目录结构示例：
 
@@ -172,6 +172,7 @@ models/
 本仓库提供 `utils/get_flash_attn.py` 来自动安装适配您环境的 `flash-attn` wheel。
 
 环境要求：
+
 - 已安装 Python 和带 CUDA 的 PyTorch
 - Linux x86_64
 
@@ -184,7 +185,6 @@ python utils/get_flash_attn.py --build
 ```
 
 该脚本首先搜索 [`mjun0812/flash-attention-prebuild-wheels`](https://github.com/mjun0812/flash-attention-prebuild-wheels)，然后尝试官方 [`Dao-AILab/flash-attention`](https://github.com/Dao-AILab/flash-attention) 发布的 wheel（包含两种 cxx11abi 变体），最后回退到通过 `pip install flash-attn --no-build-isolation` 进行源码编译。
-
 
 ## 🚀 快速开始
 
@@ -244,24 +244,30 @@ python inference.py \
 ### 已知局限性
 
 **🌍 世界知识差距**
+
 - 对于需要丰富常识、领域知识、真实品牌或人物、著名地标、名人、产品或复杂上下文理解的任务，Boogu 与强大的闭源系统仍有明显差距
 - 这一能力的评测代价极高，即使 Arena 风格的评测也难以完整衡量，因此现有基准几乎无法量化这一维度，真实差距很可能比测得的分数更大
 
 **🖼️ 图生图一致性与上下文场景**
+
 - 对于需要严格保持输入主体、身份、布局或精细细节的编辑任务，Boogu 的图生图一致性尚不够稳定
 - 我们的图生图能力更侧重摄影与文字等应用场景，因此在部分上下文生成（in-context）场景中，Boogu 仍落后于 **Seedream 5.0** 和 **Nano Banana Pro**
 
 **📝 文字渲染稳定性**
+
 - Boogu 可以处理许多中文和英文文字场景，但长文本、密集排版、小字号以及复杂设计布局仍可能产生错别字、缺字或布局漂移
 - 文字渲染目前主要面向中文和英文；其他语言没有专门优化，效果可能明显退化
 
 **🦴 复杂姿势下的身体结构**
+
 - 在多人互动、遮挡、夸张动作或不寻常视角下，手部、肢体和身体结构仍可能变得不自然或不一致
 
 **👤 小尺寸人脸与小肢体**
+
 - 由于我们使用开源的 **FLUX.1 VAE**，重建损失相对较大，因此小人脸、小肢体、眼睛和文字等细节仍可能出现伪影或不稳定
 
 **📦 开源范围有限**
+
 - 受资源限制、工程复杂度和发布边界的约束，我们无法开源全部训练与系统细节
 - 本次发布在可复现性、可用性与可持续维护之间取得平衡，为社区研究提供一个可靠的起点
 
