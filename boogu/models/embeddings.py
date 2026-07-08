@@ -124,11 +124,33 @@ def apply_rotary_emb(
 
         return out
     else:
-        # used for lumina
-        x_rotated = torch.view_as_complex(
-            x.float().reshape(*x.shape[:-1], x.shape[-1] // 2, 2)
+        # Equivalent to complex multiplication, but also works on devices where
+        # complex kernels are incomplete. Ascend NPU passes freqs as packed
+        # float values with the last dimension equal to (cos, sin).
+        x_float = x.float()
+        x_real, x_imag = x_float.reshape(*x.shape[:-1], x.shape[-1] // 2, 2).unbind(
+            -1
         )
-        freqs_cis = freqs_cis.unsqueeze(2)
-        x_out = torch.view_as_real(x_rotated * freqs_cis).flatten(3)
+
+        if torch.is_complex(freqs_cis):
+            freqs_real = freqs_cis.real
+            freqs_imag = freqs_cis.imag
+        else:
+            if freqs_cis.shape[-1] != 2:
+                raise ValueError(
+                    "`freqs_cis` must be a complex tensor or a real tensor packed "
+                    "as [..., 2] when `use_real=False`."
+                )
+            freqs_real, freqs_imag = freqs_cis.unbind(-1)
+
+        freqs_real = freqs_real.to(x.device).unsqueeze(-2)
+        freqs_imag = freqs_imag.to(x.device).unsqueeze(-2)
+        x_out = torch.stack(
+            (
+                x_real * freqs_real - x_imag * freqs_imag,
+                x_real * freqs_imag + x_imag * freqs_real,
+            ),
+            dim=-1,
+        ).flatten(3)
 
         return x_out.type_as(x)

@@ -25,6 +25,36 @@ from diffusers.models.embeddings import get_1d_rotary_pos_embed
 from einops import repeat
 
 
+def _gather_freqs_cis(freqs: torch.Tensor, index: torch.Tensor) -> torch.Tensor:
+    device = index.device
+
+    if torch.is_complex(freqs) and device.type == "npu":
+        real_freqs = (
+            freqs.real.to(device=device, dtype=torch.float32)
+            .unsqueeze(0)
+            .repeat(index.shape[0], 1, 1)
+        )
+        imag_freqs = (
+            freqs.imag.to(device=device, dtype=torch.float32)
+            .unsqueeze(0)
+            .repeat(index.shape[0], 1, 1)
+        )
+        real = torch.gather(real_freqs, dim=1, index=index)
+        imag = torch.gather(imag_freqs, dim=1, index=index)
+        return torch.stack((real, imag), dim=-1)
+
+    freqs = freqs.to(device).unsqueeze(0).repeat(index.shape[0], 1, 1)
+
+    if not torch.is_complex(freqs):
+        return torch.gather(freqs, dim=1, index=index)
+
+    # Ascend NPU gather does not support complex dtypes. Gather the supported
+    # floating-point views separately and rebuild the same complex result.
+    real = torch.gather(freqs.real, dim=1, index=index)
+    imag = torch.gather(freqs.imag, dim=1, index=index)
+    return torch.complex(real, imag)
+
+
 class BooguImageRotaryPosEmbed(nn.Module):
     def __init__(
         self,
@@ -59,14 +89,11 @@ class BooguImageRotaryPosEmbed(nn.Module):
 
         result = []
         for i in range(len(self.axes_dim)):
-            freqs = freqs_cis[i].to(ids.device)
+            freqs = freqs_cis[i]
             index = ids[:, :, i : i + 1].repeat(1, 1, freqs.shape[-1]).to(torch.int64)
-            result.append(
-                torch.gather(
-                    freqs.unsqueeze(0).repeat(index.shape[0], 1, 1), dim=1, index=index
-                )
-            )
-        return torch.cat(result, dim=-1).to(device)
+            result.append(_gather_freqs_cis(freqs, index))
+        cat_dim = -2 if result[0].ndim == 4 and result[0].shape[-1] == 2 else -1
+        return torch.cat(result, dim=cat_dim).to(device)
 
     def forward(
         self,
@@ -172,21 +199,21 @@ class BooguImageRotaryPosEmbed(nn.Module):
         cap_freqs_cis = torch.zeros(
             batch_size,
             encoder_seq_len,
-            freqs_cis.shape[-1],
+            *freqs_cis.shape[2:],
             device=device,
             dtype=freqs_cis.dtype,
         )
         ref_img_freqs_cis = torch.zeros(
             batch_size,
             max_ref_img_len,
-            freqs_cis.shape[-1],
+            *freqs_cis.shape[2:],
             device=device,
             dtype=freqs_cis.dtype,
         )
         img_freqs_cis = torch.zeros(
             batch_size,
             max_img_len,
-            freqs_cis.shape[-1],
+            *freqs_cis.shape[2:],
             device=device,
             dtype=freqs_cis.dtype,
         )
@@ -254,14 +281,11 @@ class BooguImageDoubleStreamRotaryPosEmbed(nn.Module):
 
         result = []
         for i in range(len(self.axes_dim)):
-            freqs = freqs_cis[i].to(ids.device)
+            freqs = freqs_cis[i]
             index = ids[:, :, i : i + 1].repeat(1, 1, freqs.shape[-1]).to(torch.int64)
-            result.append(
-                torch.gather(
-                    freqs.unsqueeze(0).repeat(index.shape[0], 1, 1), dim=1, index=index
-                )
-            )
-        return torch.cat(result, dim=-1).to(device)
+            result.append(_gather_freqs_cis(freqs, index))
+        cat_dim = -2 if result[0].ndim == 4 and result[0].shape[-1] == 2 else -1
+        return torch.cat(result, dim=cat_dim).to(device)
 
     def forward(
         self,
@@ -367,21 +391,21 @@ class BooguImageDoubleStreamRotaryPosEmbed(nn.Module):
         cap_freqs_cis = torch.zeros(
             batch_size,
             encoder_seq_len,
-            freqs_cis.shape[-1],
+            *freqs_cis.shape[2:],
             device=device,
             dtype=freqs_cis.dtype,
         )
         ref_img_freqs_cis = torch.zeros(
             batch_size,
             max_ref_img_len,
-            freqs_cis.shape[-1],
+            *freqs_cis.shape[2:],
             device=device,
             dtype=freqs_cis.dtype,
         )
         img_freqs_cis = torch.zeros(
             batch_size,
             max_img_len,
-            freqs_cis.shape[-1],
+            *freqs_cis.shape[2:],
             device=device,
             dtype=freqs_cis.dtype,
         )
@@ -399,7 +423,7 @@ class BooguImageDoubleStreamRotaryPosEmbed(nn.Module):
         combined_img_freqs_cis = torch.zeros(
             batch_size,
             max_combined_img_len,
-            freqs_cis.shape[-1],
+            *freqs_cis.shape[2:],
             device=device,
             dtype=freqs_cis.dtype,
         )
