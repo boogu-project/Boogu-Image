@@ -54,6 +54,8 @@ from .rope import (
 
 if is_triton_available() and ("cuda" in os.getenv("device", "cpu")):
     from ...ops.triton.layer_norm import RMSNorm
+elif "npu" in os.getenv("device", "cpu"):
+    from ...ops.simple_layer_norm import NpuRMSNorm as RMSNorm
 else:
     from torch.nn import RMSNorm
 

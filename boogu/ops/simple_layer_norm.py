@@ -3,6 +3,17 @@
 import torch
 
 
+class NpuRMSNorm(torch.nn.RMSNorm):
+    def forward(self, x):
+        if x.device.type != "npu" or self.weight is None:
+            return super().forward(x)
+
+        import torch_npu
+
+        eps = self.eps if self.eps is not None else torch.finfo(x.dtype).eps
+        return torch_npu.npu_rms_norm(x, self.weight, eps)[0]
+
+
 class SimpleRMSNorm(torch.nn.Module):
     """
     Simple RMS Normalization implementation using native PyTorch operations.

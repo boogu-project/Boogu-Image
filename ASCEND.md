@@ -80,6 +80,23 @@ ASCEND_RT_VISIBLE_DEVICES=0 .venv/bin/python inference_npu.py \
   --output outputs/edit_turbo_npu.png
 ```
 
+## NPU RMSNorm Acceleration
+
+NPU inference automatically uses `torch_npu.npu_rms_norm` for affine RMSNorm
+layers. No command-line option is required. CPU and CUDA execution keep their
+existing implementations, and non-affine RMSNorm falls back to PyTorch.
+
+The following 1024x1024 denoising times compare PyTorch RMSNorm with the fused
+NPU operator in the validated environment. Loading and first-run compilation
+time are excluded.
+
+| Checkpoint type | PyTorch RMSNorm | NPU RMSNorm |
+| --- | ---: | ---: |
+| Base | 56 s | 52 s |
+| Edit | 128 s | 118 s |
+| Turbo | 2.17 s | 1.96 s |
+| Edit-Turbo | 4.33 s | 4.04 s |
+
 ## Offline Cache Acceleration
 
 TeaCache and TaylorSeer are optional and mutually exclusive. They are disabled
