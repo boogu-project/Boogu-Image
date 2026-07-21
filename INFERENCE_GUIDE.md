@@ -7,6 +7,12 @@ text-to-image (T2I) generation and text/image-to-image (TI2I) editing:
 inference.py
 ```
 
+This guide covers the feature-rich CPU/CUDA entry point and its advanced
+offload, caching, prompt rewriting, FP8, and compile options. For the supported
+Ascend PTA BF16 baseline, use `inference_npu.py` and see
+[ASCEND.md](./ASCEND.md). The NPU entry point intentionally excludes the
+unvalidated advanced options documented here.
+
 Many ready-to-run examples are available in:
 
 ```bash
@@ -80,6 +86,13 @@ Supported `device` values:
 | `cpu` | CPU execution. Do not enable CPU/group offload flags. |
 | `cuda` | Default visible CUDA device, usually equivalent to `cuda:0`. |
 | `cuda:x` | Specific visible CUDA device, e.g. `cuda:0`. |
+| `npu` | Default process-visible Ascend NPU. Use `inference_npu.py`. |
+| `npu:x` | Specific process-visible Ascend NPU, e.g. `npu:0`. Use `inference_npu.py`. |
+
+The manual `export device=...` requirement above applies to `inference.py`.
+`inference_npu.py` copies `--device` into the environment before importing the
+pipeline. Restrict physical NPU visibility with `ASCEND_RT_VISIBLE_DEVICES`;
+the `npu:x` index is relative to the devices visible inside that process.
 
 The pipeline uses lazy placement in several paths. Models are often loaded on
 CPU first, then moved to the requested execution device only when needed. If an
