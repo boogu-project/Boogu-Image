@@ -20,8 +20,10 @@ for that checkpoint.
 
 ## Environment
 
-Install matching PyTorch and torch_npu PTA packages first, then install the
-remaining Python dependencies without replacing PyTorch:
+Install the matching CANN toolkit first. The Ascend requirements pin the PTA
+pair validated for this change (`torch==2.10.0`, `torch-npu==2.10.0`) and
+install the remaining Python dependencies. Use the versions required by your
+CANN release if they differ:
 
 ```bash
 python -m venv --system-site-packages .venv

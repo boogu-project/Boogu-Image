@@ -1,4 +1,7 @@
-# Install torch and torch_npu from the matching Ascend PTA release first.
+# Tested with CANN 9.0.0, Python 3.12, and aarch64.
+# Use the PTA versions required by your CANN release when they differ.
+torch==2.10.0
+torch-npu==2.10.0
 accelerate>=1.0
 diffusers[torch]>=0.35.2,<0.39
 einops>=0.7
