@@ -1,0 +1,9 @@
+# Install torch and torch_npu from the matching Ascend PTA release first.
+accelerate>=1.0
+diffusers[torch]>=0.35.2,<0.39
+einops>=0.7
+numpy>=1.26
+pillow>=10
+safetensors>=0.4
+scipy>=1.11
+transformers[torch]>=4.57.3,<6

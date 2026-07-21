@@ -17,12 +17,69 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import os
 from typing import List, Tuple
 
 import torch
 import torch.nn as nn
 from diffusers.models.embeddings import get_1d_rotary_pos_embed
 from einops import repeat
+
+
+def _rotary_freqs_dtype() -> torch.dtype:
+    device = os.getenv("device", "cpu").lower()
+    if torch.backends.mps.is_available() or device.startswith("npu"):
+        return torch.float32
+    return torch.float64
+
+
+def _gather_rotary_freqs(
+    freqs_cis: List[torch.Tensor], ids: torch.Tensor, axes_dim: Tuple[int, ...]
+) -> torch.Tensor:
+    device = ids.device
+    if device.type == "npu":
+        return _gather_rotary_freqs_as_real(freqs_cis, ids, axes_dim)
+
+    gather_ids = ids.to("cpu") if device.type == "mps" else ids
+
+    result = []
+    for i in range(len(axes_dim)):
+        freqs = freqs_cis[i].to(gather_ids.device)
+        index = (
+            gather_ids[:, :, i : i + 1]
+            .repeat(1, 1, freqs.shape[-1])
+            .to(torch.int64)
+        )
+        result.append(
+            torch.gather(
+                freqs.unsqueeze(0).repeat(index.shape[0], 1, 1), dim=1, index=index
+            )
+        )
+
+    return torch.cat(result, dim=-1).to(device)
+
+
+def _gather_rotary_freqs_as_real(
+    freqs_cis: List[torch.Tensor], ids: torch.Tensor, axes_dim: Tuple[int, ...]
+) -> torch.Tensor:
+    result = []
+    for i in range(len(axes_dim)):
+        freqs = freqs_cis[i].to(device=ids.device, dtype=torch.complex64)
+        freqs_real = torch.view_as_real(freqs)
+        index = (
+            ids[:, :, i : i + 1]
+            .repeat(1, 1, freqs.shape[-1])
+            .to(torch.int64)
+        )
+        index = index.unsqueeze(-1).expand(-1, -1, -1, 2)
+        gathered_real = torch.gather(
+            freqs_real.unsqueeze(0).repeat(index.shape[0], 1, 1, 1),
+            dim=1,
+            index=index,
+        )
+        result.append(torch.view_as_complex(gathered_real.contiguous()))
+
+    return torch.cat(result, dim=-1)
 
 
 class BooguImageRotaryPosEmbed(nn.Module):
@@ -44,29 +101,14 @@ class BooguImageRotaryPosEmbed(nn.Module):
         axes_dim: Tuple[int, int, int], axes_lens: Tuple[int, int, int], theta: int
     ) -> List[torch.Tensor]:
         freqs_cis = []
-        freqs_dtype = (
-            torch.float32 if torch.backends.mps.is_available() else torch.float64
-        )
+        freqs_dtype = _rotary_freqs_dtype()
         for i, (d, e) in enumerate(zip(axes_dim, axes_lens)):
             emb = get_1d_rotary_pos_embed(d, e, theta=theta, freqs_dtype=freqs_dtype)
             freqs_cis.append(emb)
         return freqs_cis
 
     def _get_freqs_cis(self, freqs_cis, ids: torch.Tensor) -> torch.Tensor:
-        device = ids.device
-        if ids.device.type == "mps":
-            ids = ids.to("cpu")
-
-        result = []
-        for i in range(len(self.axes_dim)):
-            freqs = freqs_cis[i].to(ids.device)
-            index = ids[:, :, i : i + 1].repeat(1, 1, freqs.shape[-1]).to(torch.int64)
-            result.append(
-                torch.gather(
-                    freqs.unsqueeze(0).repeat(index.shape[0], 1, 1), dim=1, index=index
-                )
-            )
-        return torch.cat(result, dim=-1).to(device)
+        return _gather_rotary_freqs(freqs_cis, ids, self.axes_dim)
 
     def forward(
         self,
@@ -239,29 +281,14 @@ class BooguImageDoubleStreamRotaryPosEmbed(nn.Module):
         axes_dim: Tuple[int, int, int], axes_lens: Tuple[int, int, int], theta: int
     ) -> List[torch.Tensor]:
         freqs_cis = []
-        freqs_dtype = (
-            torch.float32 if torch.backends.mps.is_available() else torch.float64
-        )
+        freqs_dtype = _rotary_freqs_dtype()
         for i, (d, e) in enumerate(zip(axes_dim, axes_lens)):
             emb = get_1d_rotary_pos_embed(d, e, theta=theta, freqs_dtype=freqs_dtype)
             freqs_cis.append(emb)
         return freqs_cis
 
     def _get_freqs_cis(self, freqs_cis, ids: torch.Tensor) -> torch.Tensor:
-        device = ids.device
-        if ids.device.type == "mps":
-            ids = ids.to("cpu")
-
-        result = []
-        for i in range(len(self.axes_dim)):
-            freqs = freqs_cis[i].to(ids.device)
-            index = ids[:, :, i : i + 1].repeat(1, 1, freqs.shape[-1]).to(torch.int64)
-            result.append(
-                torch.gather(
-                    freqs.unsqueeze(0).repeat(index.shape[0], 1, 1), dim=1, index=index
-                )
-            )
-        return torch.cat(result, dim=-1).to(device)
+        return _gather_rotary_freqs(freqs_cis, ids, self.axes_dim)
 
     def forward(
         self,
@@ -486,9 +513,7 @@ class BooguImagePromptTuningRotaryPosEmbed(nn.Module):
             - attention_mask: [B, num_tokens] or [B, num_tokens, num_tokens] - Attention mask
         """
         # Generate 1D rotary embeddings for text-style tokens
-        freqs_dtype = (
-            torch.float32 if torch.backends.mps.is_available() else torch.float64
-        )
+        freqs_dtype = _rotary_freqs_dtype()
 
         # get_1d_rotary_pos_embed(dim, seq_len) returns [seq_len, dim//2]
         # Because RoPE uses complex representation, each dimension is split into sin/cos pairs
@@ -514,9 +539,10 @@ class BooguImagePromptTuningRotaryPosEmbed(nn.Module):
         ]  # [num_tokens, instruction_dim//2]
 
         # Expand to batch size and move to target device
-        rotary_emb = (
-            rotary_emb.unsqueeze(0).expand(batch_size, -1, -1).to(device)
-        )  # [B, num_tokens, instruction_dim//2]
+        rotary_emb = rotary_emb.unsqueeze(0).expand(batch_size, -1, -1)
+        if torch.device(device).type == "npu":
+            rotary_emb = rotary_emb.to(torch.complex64)
+        rotary_emb = rotary_emb.to(device)  # [B, num_tokens, instruction_dim//2]
 
         # Create attention mask based on use_causal_mask parameter
         if use_causal_mask:
