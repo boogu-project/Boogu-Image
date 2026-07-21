@@ -32,6 +32,31 @@ def _prepare_sdpa_padding_mask(
     )
 
 
+def _scaled_dot_product_attention(
+    query: torch.Tensor,
+    key: torch.Tensor,
+    value: torch.Tensor,
+    attention_mask: Optional[torch.Tensor],
+    softmax_scale: float,
+) -> torch.Tensor:
+    if query.device.type == "npu":
+        return F.scaled_dot_product_attention(
+            query,
+            key,
+            value,
+            attn_mask=attention_mask,
+            scale=softmax_scale,
+            enable_gqa=True,
+        )
+
+    repeats = query.size(-3) // key.size(-3)
+    key = key.repeat_interleave(repeats, -3)
+    value = value.repeat_interleave(repeats, -3)
+    return F.scaled_dot_product_attention(
+        query, key, value, attn_mask=attention_mask, scale=softmax_scale
+    )
+
+
 class BooguImageDoubleStreamSelfAttnProcessorFlash2Varlen(nn.Module):
     """
     Double-stream self-attention processor with flash attention and variable length sequences.
@@ -848,12 +873,8 @@ class BooguImageDoubleStreamSelfAttnProcessor(nn.Module):
         key = key.transpose(1, 2)
         value = value.transpose(1, 2)
 
-        # explicitly repeat key and value to match query length, otherwise using enable_gqa=True results in MATH backend of sdpa in our test of pytorch2.6
-        key = key.repeat_interleave(query.size(-3) // key.size(-3), -3)
-        value = value.repeat_interleave(query.size(-3) // value.size(-3), -3)
-
-        hidden_states = F.scaled_dot_product_attention(
-            query, key, value, attn_mask=joint_attention_mask, scale=softmax_scale
+        hidden_states = _scaled_dot_product_attention(
+            query, key, value, joint_attention_mask, softmax_scale
         )
         hidden_states = hidden_states.transpose(1, 2).reshape(
             batch_size, -1, attn.heads * head_dim
@@ -1267,12 +1288,8 @@ class BooguImageAttnProcessor:
         key = key.transpose(1, 2)
         value = value.transpose(1, 2)
 
-        # explicitly repeat key and value to match query length, otherwise using enable_gqa=True results in MATH backend of sdpa in our test of pytorch2.6
-        key = key.repeat_interleave(query.size(-3) // key.size(-3), -3)
-        value = value.repeat_interleave(query.size(-3) // value.size(-3), -3)
-
-        hidden_states = F.scaled_dot_product_attention(
-            query, key, value, attn_mask=attention_mask, scale=softmax_scale
+        hidden_states = _scaled_dot_product_attention(
+            query, key, value, attention_mask, softmax_scale
         )
         hidden_states = hidden_states.transpose(1, 2).reshape(
             batch_size, -1, attn.heads * head_dim

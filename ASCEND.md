@@ -80,7 +80,9 @@ ASCEND_RT_VISIBLE_DEVICES=0 .venv/bin/python inference_npu.py \
   --output outputs/edit_turbo_npu.png
 ```
 
-## NPU RMSNorm Acceleration
+## NPU Operator Acceleration
+
+### Fused RMSNorm
 
 NPU inference automatically uses `torch_npu.npu_rms_norm` for affine RMSNorm
 layers. No command-line option is required. CPU and CUDA execution keep their
@@ -96,6 +98,17 @@ time are excluded.
 | Edit | 128 s | 118 s |
 | Turbo | 2.17 s | 1.96 s |
 | Edit-Turbo | 4.33 s | 4.04 s |
+
+### Native GQA
+
+NPU SDPA automatically uses native grouped-query attention instead of
+materializing repeated key and value heads. CPU and CUDA keep the existing KV
+expansion path. No command-line option is required.
+
+The NPU operator microbenchmark improved from 0.354 ms to 0.243 ms for 32 query
+heads, 8 KV heads, and sequence length 1024, and from 2.473 ms to 2.309 ms for
+28 query heads, 7 KV heads, and sequence length 4096. A same-device Base run
+improved 50-step denoising from 52 s to 51 s with identical output.
 
 ## Offline Cache Acceleration
 
