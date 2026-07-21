@@ -250,7 +250,7 @@ ASCEND_RT_VISIBLE_DEVICES=0 python inference_npu.py \
 ```
 
 See [ASCEND.md](./ASCEND.md) for environment setup, image editing, checkpoint
-validation, and per-model defaults.
+validation, per-model defaults, and optional Base/Edit cache acceleration.
 
 ### Hardware Notes
 

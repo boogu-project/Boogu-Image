@@ -2,7 +2,8 @@
 
 The Ascend entry point supports all Boogu-Image-0.1 BF16 checkpoints with
 native PyTorch, Transformers, Diffusers, and torch_npu. It does not enable FP8,
-FlashAttention, Triton, torch.compile, or CPU offload.
+FlashAttention, Triton, torch.compile, or CPU offload. Base and Edit additionally
+support optional TeaCache and TaylorSeer acceleration for offline inference.
 
 `inference_npu.py` reads `_class_name` from `model_index.json` to select the
 standard or Turbo pipeline. Passing `--input-image` selects image editing;
@@ -78,6 +79,46 @@ ASCEND_RT_VISIBLE_DEVICES=0 .venv/bin/python inference_npu.py \
   --turbo \
   --output outputs/edit_turbo_npu.png
 ```
+
+## Offline Cache Acceleration
+
+TeaCache and TaylorSeer are optional and mutually exclusive. They are disabled
+by default because cached inference changes the numerical path and can produce
+small image differences. The cache lifecycle is implemented by the standard
+50-step pipeline, so these options support Base and Edit only; Turbo and
+Edit-Turbo reject them.
+
+| Option | Effect |
+| --- | --- |
+| `--enable-teacache` | Enable TeaCache on single-stream layers. |
+| `--enable-taylorseer` | Enable TaylorSeer on single-stream layers. |
+| `--cache-all-layers` | Extend the selected method to double-stream layers. |
+| `--teacache-rel-l1-thresh` | TeaCache relative L1 threshold; default `0.05`. |
+
+For example, enable all-layer TeaCache for Edit:
+
+```bash
+ASCEND_RT_VISIBLE_DEVICES=0 .venv/bin/python inference_npu.py \
+  --device npu:0 \
+  --model models/Boogu-Image-0.1-Edit \
+  --input-image input_image_examples/03.jpg \
+  --prompt "Replace the background with a beach while preserving the subject." \
+  --enable-teacache \
+  --cache-all-layers \
+  --output outputs/edit_teacache_npu.png
+```
+
+The following 1024x1024, 50-step denoising times are indicative results from the
+validated CANN 9.0.0, PyTorch 2.10.0, and torch-npu 2.10.0 environment. Exact
+performance and image differences depend on the prompt and input image.
+
+| Cache mode | Base T2I | Edit TI2I |
+| --- | ---: | ---: |
+| Disabled | 56 s | 128 s |
+| TeaCache, single-stream | 56 s | 111 s |
+| TeaCache, all layers | 40 s | 54 s |
+| TaylorSeer, single-stream | 35 s | 79 s |
+| TaylorSeer, all layers | 26 s | 58 s |
 
 The official recommended Edit-Turbo checkpoint can be downloaded with:
 

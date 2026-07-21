@@ -46,6 +46,28 @@ def parse_args():
     parser.add_argument("--steps", type=int)
     parser.add_argument("--text-guidance-scale", type=float)
     parser.add_argument("--image-guidance-scale", type=float)
+    cache_group = parser.add_mutually_exclusive_group()
+    cache_group.add_argument(
+        "--enable-teacache",
+        action="store_true",
+        help="Enable TeaCache for Base or Edit inference.",
+    )
+    cache_group.add_argument(
+        "--enable-taylorseer",
+        action="store_true",
+        help="Enable TaylorSeer for Base or Edit inference.",
+    )
+    parser.add_argument(
+        "--cache-all-layers",
+        action="store_true",
+        help="Extend the selected cache method to double-stream layers.",
+    )
+    parser.add_argument(
+        "--teacache-rel-l1-thresh",
+        type=float,
+        default=0.05,
+        help="TeaCache relative L1 threshold (default: 0.05).",
+    )
     parser.add_argument("--check-only", action="store_true")
     return parser.parse_args()
 
@@ -89,6 +111,38 @@ def select_pipeline_class_name(model_path: Path, force_turbo: bool) -> str:
     return pipeline_class_name
 
 
+def validate_cache_options(
+    pipeline_class_name: str,
+    enable_teacache: bool,
+    enable_taylorseer: bool,
+    cache_all_layers: bool,
+) -> None:
+    cache_enabled = enable_teacache or enable_taylorseer
+    if cache_all_layers and not cache_enabled:
+        raise ValueError("--cache-all-layers requires a cache method")
+    if pipeline_class_name == TURBO_PIPELINE and cache_enabled:
+        raise ValueError("TeaCache and TaylorSeer are not supported by Turbo pipelines")
+
+
+def configure_cache(
+    pipeline,
+    enable_teacache: bool,
+    enable_taylorseer: bool,
+    cache_all_layers: bool,
+    teacache_rel_l1_thresh: float,
+) -> None:
+    pipeline.enable_taylorseer = enable_taylorseer
+    pipeline.transformer.enable_teacache = enable_teacache
+    pipeline.transformer.enable_teacache_for_all_layers = (
+        enable_teacache and cache_all_layers
+    )
+    pipeline.transformer.enable_taylorseer_for_all_layers = (
+        enable_taylorseer and cache_all_layers
+    )
+    if enable_teacache:
+        pipeline.transformer.teacache_rel_l1_thresh = teacache_rel_l1_thresh
+
+
 def verify_checkpoint(model_path: Path) -> None:
     from safetensors import safe_open
 
@@ -124,6 +178,12 @@ def main():
     pipeline_class_name = select_pipeline_class_name(model_path, args.turbo)
     config = resolve_inference_config(
         pipeline_class_name, has_input_image=input_image_path is not None
+    )
+    validate_cache_options(
+        pipeline_class_name,
+        args.enable_teacache,
+        args.enable_taylorseer,
+        args.cache_all_layers,
     )
     verify_checkpoint(model_path)
     if args.check_only:
@@ -171,6 +231,13 @@ def main():
         torch_dtype=torch.bfloat16,
         low_cpu_mem_usage=True,
         trust_remote_code=True,
+    )
+    configure_cache(
+        pipe,
+        args.enable_teacache,
+        args.enable_taylorseer,
+        args.cache_all_layers,
+        args.teacache_rel_l1_thresh,
     )
     pipe.to(args.device)
 

@@ -10,8 +10,8 @@ inference.py
 This guide covers the feature-rich CPU/CUDA entry point and its advanced
 offload, caching, prompt rewriting, FP8, and compile options. For the supported
 Ascend PTA BF16 baseline, use `inference_npu.py` and see
-[ASCEND.md](./ASCEND.md). The NPU entry point intentionally excludes the
-unvalidated advanced options documented here.
+[ASCEND.md](./ASCEND.md). Only the NPU options documented there, including the
+validated TeaCache and TaylorSeer subset, are supported by that entry point.
 
 Many ready-to-run examples are available in:
 
