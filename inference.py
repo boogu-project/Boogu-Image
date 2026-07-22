@@ -594,7 +594,7 @@ def parse_args() -> argparse.Namespace:
         type=get_device_validator(),
         required=True,
         help="The device for the main pipeline to use. "
-        "Choose from ['cpu', 'cuda', 'cuda:x']. ",
+        "Choose from ['cpu', 'cuda', 'cuda:x', 'npu', 'npu:x']. ",
     )
 
     parser.add_argument(
@@ -603,7 +603,7 @@ def parse_args() -> argparse.Namespace:
         type=get_device_validator(additional_types=["auto"]),
         default=None,
         help="The device for the instruction reasoner (the rewriter) to use. "
-        "Choose from ['cpu', 'cuda', 'cuda:x', 'auto']. "
+        "Choose from ['cpu', 'cuda', 'cuda:x', 'npu', 'npu:x', 'auto']. "
         "Only takes effect when `use_rewrite_text_instruction` is True.",
     )
 
@@ -1044,7 +1044,7 @@ def load_pipeline(
         raise ValueError(
             "[Device and Offload Strategy Compatibility Error]: The device and offload strategy are not compatible. "
             "Please make sure all three offload flags are valid booleans, at most one offload strategy is enabled, "
-            "and `device` is a CUDA execution device when any CPU offload strategy is enabled. "
+            "and `device` is a CUDA or NPU execution device when any CPU offload strategy is enabled. "
             f"device={args.device}, "
             f"enable_sequential_cpu_offload_flag={args.enable_sequential_cpu_offload_flag}, "
             f"enable_model_cpu_offload_flag={args.enable_model_cpu_offload_flag}, "
@@ -1105,21 +1105,21 @@ def load_pipeline(
             onload_device=args.device,
             offload_type="block_level",
             num_blocks_per_group=1,
-            use_stream=True,
+            use_stream=args.device.startswith("cuda"),
         )
         apply_group_offloading(
             pipeline.mllm,
             onload_device=args.device,
             offload_type="block_level",
             num_blocks_per_group=1,
-            use_stream=True,
+            use_stream=args.device.startswith("cuda"),
         )
         apply_group_offloading(
             pipeline.vae,
             onload_device=args.device,
             offload_type="block_level",
             num_blocks_per_group=1,
-            use_stream=True,
+            use_stream=args.device.startswith("cuda"),
         )
         if args.use_prompt_tuning:
             apply_group_offloading(
@@ -1127,7 +1127,7 @@ def load_pipeline(
                 onload_device=args.device,
                 offload_type="block_level",
                 num_blocks_per_group=1,
-                use_stream=True,
+                use_stream=args.device.startswith("cuda"),
             )
 
     if args.enable_torch_compile:

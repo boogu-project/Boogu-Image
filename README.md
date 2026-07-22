@@ -249,8 +249,9 @@ ASCEND_RT_VISIBLE_DEVICES=0 python inference_npu.py \
   --output outputs/turbo_npu.png
 ```
 
-See [ASCEND.md](./ASCEND.md) for environment setup, image editing, checkpoint
-validation, per-model defaults, and optional Base/Edit cache acceleration.
+See [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md) for environment setup,
+image editing, checkpoint validation, cache acceleration, CPU offload, and the
+complete `npu_demo_scripts/` set.
 
 ### Hardware Notes
 

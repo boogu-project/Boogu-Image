@@ -1,9 +1,11 @@
 # Ascend NPU BF16 Inference
 
-The Ascend entry point supports all Boogu-Image-0.1 BF16 checkpoints with
-native PyTorch, Transformers, Diffusers, and torch_npu. It does not enable FP8,
-FlashAttention, Triton, torch.compile, or CPU offload. Base and Edit additionally
-support optional TeaCache and TaylorSeer acceleration for offline inference.
+The streamlined Ascend entry point supports all Boogu-Image-0.1 BF16
+checkpoints with native PyTorch, Transformers, Diffusers, and torch_npu. It does
+not enable FP8, FlashAttention, Triton, torch.compile, or CPU offload. Base and
+Edit additionally support optional TeaCache and TaylorSeer acceleration for
+offline inference. Use `inference.py` and `npu_demo_scripts/` for the complete
+demo and CPU-offload feature set.
 
 `inference_npu.py` reads `_class_name` from `model_index.json` to select the
 standard or Turbo pipeline. Passing `--input-image` selects image editing;
@@ -109,6 +111,34 @@ The NPU operator microbenchmark improved from 0.354 ms to 0.243 ms for 32 query
 heads, 8 KV heads, and sequence length 1024, and from 2.473 ms to 2.309 ms for
 28 query heads, 7 KV heads, and sequence length 4096. A same-device Base run
 improved 50-step denoising from 52 s to 51 s with identical output.
+
+### Fused SwiGLU
+
+NPU eager inference uses `torch_npu.npu_swiglu` in the transformer feed-forward
+layers. CPU, CUDA, and compiled execution keep their existing implementations.
+In the validated BF16 microbenchmark, the fused activation improved from
+1.184 ms to 0.613 ms at 4096 tokens, while the complete feed-forward block
+improved from 5.415 ms to 4.797 ms.
+
+`torch_npu.npu_rotary_mul` is not used. The current batch-specific complex RoPE
+layout requires per-call coefficient expansion, which made the fused path
+slower than the existing implementation.
+
+## Full Demo and CPU Offload Support
+
+`npu_demo_scripts/` mirrors every script in `demo_scripts/` with NPU device
+settings. These scripts use the feature-rich `inference.py` entry point for
+batch inference, prompt rewriting, prompt tuning, TeaCache, TaylorSeer, BOG,
+and CPU offload combinations.
+
+Sequential, model, and group offload are mutually exclusive. NPU group offload
+uses synchronous transfers because Diffusers 0.38 only exposes streamed group
+offload for CUDA and XPU devices.
+
+```bash
+ASCEND_RT_VISIBLE_DEVICES=0 bash npu_demo_scripts/demo_seq_offload_t2i.sh
+ASCEND_RT_VISIBLE_DEVICES=0 bash npu_demo_scripts/demo_group_offload_t2i.sh
+```
 
 ## Offline Cache Acceleration
 

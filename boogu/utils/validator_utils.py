@@ -89,8 +89,8 @@ def validate_device_and_offload_strategy_compatibility(
     if not _DEVICE_PATTERN.fullmatch(device):
         return False
 
-    # The existing Diffusers/Accelerate offload path is only validated on CUDA.
-    if any(offload_flags) and not device.startswith("cuda"):
+    # CPU offload requires an accelerator execution device.
+    if any(offload_flags) and not device.startswith(("cuda", "npu")):
         return False
 
     return True

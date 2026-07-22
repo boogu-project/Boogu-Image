@@ -24,7 +24,11 @@ def test_npu_is_valid_without_offload():
     )
 
 
-def test_npu_offload_is_rejected_until_validated():
-    assert not validate_device_and_offload_strategy_compatibility(
-        "npu:0", False, True, False
+@pytest.mark.parametrize(
+    ("sequential", "model", "group"),
+    [(True, False, False), (False, True, False), (False, False, True)],
+)
+def test_npu_offload_is_supported(sequential, model, group):
+    assert validate_device_and_offload_strategy_compatibility(
+        "npu:0", sequential, model, group
     )

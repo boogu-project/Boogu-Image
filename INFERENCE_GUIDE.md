@@ -7,16 +7,17 @@ text-to-image (T2I) generation and text/image-to-image (TI2I) editing:
 inference.py
 ```
 
-This guide covers the feature-rich CPU/CUDA entry point and its advanced
-offload, caching, prompt rewriting, FP8, and compile options. For the supported
-Ascend PTA BF16 baseline, use `inference_npu.py` and see
-[ASCEND.md](./ASCEND.md). Only the NPU options documented there, including the
-validated TeaCache and TaylorSeer subset, are supported by that entry point.
+This guide covers the feature-rich CPU, CUDA, and NPU entry point and its
+advanced offload, caching, prompt rewriting, FP8, and compile options. Ascend
+NPU support in this change is BF16 only; CUDA-specific FP8 and compile paths are
+unchanged. For the streamlined Ascend PTA entry point and NPU-specific
+validation, see [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md).
 
 Many ready-to-run examples are available in:
 
 ```bash
 demo_scripts/
+npu_demo_scripts/
 ```
 
 These scripts cover common T2I, TI2I, batch inference, offload, prompt rewriting,
@@ -86,8 +87,8 @@ Supported `device` values:
 | `cpu` | CPU execution. Do not enable CPU/group offload flags. |
 | `cuda` | Default visible CUDA device, usually equivalent to `cuda:0`. |
 | `cuda:x` | Specific visible CUDA device, e.g. `cuda:0`. |
-| `npu` | Default process-visible Ascend NPU. Use `inference_npu.py`. |
-| `npu:x` | Specific process-visible Ascend NPU, e.g. `npu:0`. Use `inference_npu.py`. |
+| `npu` | Default process-visible Ascend NPU. |
+| `npu:x` | Specific process-visible Ascend NPU, e.g. `npu:0`. |
 
 The manual `export device=...` requirement above applies to `inference.py`.
 `inference_npu.py` copies `--device` into the environment before importing the
@@ -153,6 +154,8 @@ Supported `rewriter_device` values:
 | `cpu` | Run the local rewriter on CPU. Slow, but valid. |
 | `cuda` | Run on the default visible CUDA device. |
 | `cuda:x` | Run on a specific visible CUDA device. |
+| `npu` | Run on the default visible Ascend NPU. |
+| `npu:x` | Run on a specific visible Ascend NPU. |
 | `auto` | Use auto/meta placement when the model is loaded with auto device mapping. |
 
 When all of the following are true, the pipeline reuses the instruction encoder
@@ -394,8 +397,8 @@ Validation rules enforced by the code:
 
 - All three offload flags must be valid booleans.
 - At most one offload flag may be `True`.
-- If any offload flag is `True`, `device` must be `cuda` or `cuda:x`; `cpu` is
-  rejected because CPU offload needs a non-CPU execution device.
+- If any offload flag is `True`, `device` must be CUDA or NPU; `cpu` is rejected
+  because CPU offload needs an accelerator execution device.
 - If prompt rewriting is enabled, offload is incompatible with a shared local
   MLLM/rewriter. Use a custom local rewriter or remote rewriting.
 
@@ -786,7 +789,7 @@ custom transformer path.
 - [ ] Set `--pretrained_pipeline_name_or_path`.
 - [ ] Set `--custom_diffusion_transformer_path` if replacing the transformer checkpoint.
 - [ ] Enable at most one offload flag.
-- [ ] Use CUDA, not CPU, when any offload flag is enabled.
+- [ ] Use CUDA or NPU, not CPU, when any offload flag is enabled.
 - [ ] Keep `rewriter_device == device` when the MLLM and rewriter are shared.
 - [ ] Prefer a separate custom local rewriter or remote rewriting for advanced
   device/offload setups.

@@ -24,6 +24,13 @@ if is_flash_attn_available() and ("cuda" in os.getenv("device", "cpu")):
     from flash_attn.ops.activations import swiglu
 
     from .components import swiglu as torch_swiglu
+elif "npu" in os.getenv("device", "cpu"):
+    import torch_npu
+
+    from .components import swiglu as torch_swiglu
+
+    def swiglu(x, y):
+        return torch_npu.npu_swiglu(torch.cat((x, y), dim=-1), dim=-1)
 else:
     from .components import swiglu
     from .components import swiglu as torch_swiglu

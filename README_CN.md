@@ -252,8 +252,8 @@ ASCEND_RT_VISIBLE_DEVICES=0 python inference_npu.py \
   --output outputs/turbo_npu.png
 ```
 
-环境配置、图像编辑、权重校验、各模型默认参数以及 Base/Edit 可选缓存加速请参考
-[ASCEND.md](./ASCEND.md)。
+环境配置、图像编辑、权重校验、缓存加速、CPU offload 以及完整的
+`npu_demo_scripts/` 请参考 [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md)。
 
 ### 硬件说明
 
