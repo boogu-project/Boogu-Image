@@ -4,8 +4,8 @@ The streamlined Ascend entry point supports all Boogu-Image-0.1 BF16
 checkpoints with native PyTorch, Transformers, Diffusers, and torch_npu. It does
 not enable FP8, FlashAttention, Triton, torch.compile, or CPU offload. Base and
 Edit additionally support optional TeaCache and TaylorSeer acceleration for
-offline inference. Use `inference.py` and `npu_demo_scripts/` for the complete
-demo and CPU-offload feature set.
+offline inference. Use `inference.py` and the shared `demo_scripts/` for the
+complete demo and CPU-offload feature set.
 
 `inference_npu.py` reads `_class_name` from `model_index.json` to select the
 standard or Turbo pipeline. Passing `--input-image` selects image editing;
@@ -124,20 +124,27 @@ improved from 5.415 ms to 4.797 ms.
 layout requires per-call coefficient expansion, which made the fused path
 slower than the existing implementation.
 
-## Full Demo and CPU Offload Support
+## Shared Demos and CPU Offload Support
 
-`npu_demo_scripts/` mirrors every script in `demo_scripts/` with NPU device
-settings. These scripts use the feature-rich `inference.py` entry point for
-batch inference, prompt rewriting, prompt tuning, TeaCache, TaylorSeer, BOG,
-and CPU offload combinations.
+`demo_scripts/` is shared by CUDA and NPU. The scripts keep their existing CUDA
+defaults but honor externally supplied `device` and `rewriter_device` values.
+They use the feature-rich `inference.py` entry point for batch inference,
+prompt rewriting, prompt tuning, TeaCache, TaylorSeer, BOG, and CPU offload
+combinations.
 
 Sequential, model, and group offload are mutually exclusive. NPU group offload
 uses synchronous transfers because Diffusers 0.38 only exposes streamed group
 offload for CUDA and XPU devices.
 
 ```bash
-ASCEND_RT_VISIBLE_DEVICES=0 bash npu_demo_scripts/demo_seq_offload_t2i.sh
-ASCEND_RT_VISIBLE_DEVICES=0 bash npu_demo_scripts/demo_group_offload_t2i.sh
+ASCEND_RT_VISIBLE_DEVICES=0 device=npu:0 \
+  bash demo_scripts/demo_seq_offload_t2i.sh
+ASCEND_RT_VISIBLE_DEVICES=0 device=npu:0 \
+  bash demo_scripts/demo_group_offload_t2i.sh
+
+# Demos with a separate local rewriter can override both devices.
+ASCEND_RT_VISIBLE_DEVICES=0,1 device=npu:0 rewriter_device=npu:1 \
+  bash demo_scripts/demo_t2i_local_reasoning.sh
 ```
 
 ## Offline Cache Acceleration

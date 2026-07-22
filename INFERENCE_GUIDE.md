@@ -17,7 +17,6 @@ Many ready-to-run examples are available in:
 
 ```bash
 demo_scripts/
-npu_demo_scripts/
 ```
 
 These scripts cover common T2I, TI2I, batch inference, offload, prompt rewriting,
@@ -27,6 +26,16 @@ and editing, while scripts whose names contain `reasoning` show how to enable
 the built-in instruction reasoner / rewriter. For most users, the fastest way to
 start is to copy one of these scripts and adjust only the model path, prompt,
 input image paths, device settings, and output name.
+
+The scripts preserve their existing CUDA defaults and can be reused on NPU by
+overriding the device variables at launch:
+
+```bash
+bash demo_scripts/demo_t2i.sh
+device=npu:0 bash demo_scripts/demo_t2i.sh
+device=npu:0 rewriter_device=npu:1 \
+  bash demo_scripts/demo_t2i_local_reasoning.sh
+```
 
 Most demo scripts also set:
 

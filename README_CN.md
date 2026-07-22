@@ -252,8 +252,8 @@ ASCEND_RT_VISIBLE_DEVICES=0 python inference_npu.py \
   --output outputs/turbo_npu.png
 ```
 
-环境配置、图像编辑、权重校验、缓存加速、CPU offload 以及完整的
-`npu_demo_scripts/` 请参考 [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md)。
+环境配置、图像编辑、权重校验、缓存加速、CPU offload 以及在 NPU 上复用
+`demo_scripts/` 的方式请参考 [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md)。
 
 ### 硬件说明
 

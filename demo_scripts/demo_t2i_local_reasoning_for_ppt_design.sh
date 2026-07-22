@@ -4,8 +4,8 @@ export HF_MODULES_CACHE="$(pwd)/.hf_modules_cache"
 
 ###########################################################
 # Device settings (Important!)
-export device="cuda:0"
-export rewriter_device='cuda:1' # cuda:0 is the main device, cuda:1 is the rewriter device
+export device="${device:-cuda:0}"
+export rewriter_device="${rewriter_device:-cuda:1}" # Could be different from the main device
 enable_inner_devices_manager=False
 ###########################################################
 

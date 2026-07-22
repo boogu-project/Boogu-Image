@@ -251,7 +251,7 @@ ASCEND_RT_VISIBLE_DEVICES=0 python inference_npu.py \
 
 See [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md) for environment setup,
 image editing, checkpoint validation, cache acceleration, CPU offload, and the
-complete `npu_demo_scripts/` set.
+shared `demo_scripts/` usage on NPU.
 
 ### Hardware Notes
 
