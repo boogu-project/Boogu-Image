@@ -23,6 +23,40 @@ from diffusers.models.attention_processor import Attention
 from .embeddings import apply_rotary_emb
 
 
+def _prepare_sdpa_padding_mask(
+    attention_mask: torch.Tensor, batch_size: int, query_length: int
+) -> torch.Tensor:
+    """Expand a 2D padding mask to the shape required by fused SDPA backends."""
+    return attention_mask.bool().view(batch_size, 1, 1, -1).expand(
+        batch_size, 1, query_length, -1
+    )
+
+
+def _scaled_dot_product_attention(
+    query: torch.Tensor,
+    key: torch.Tensor,
+    value: torch.Tensor,
+    attention_mask: Optional[torch.Tensor],
+    softmax_scale: float,
+) -> torch.Tensor:
+    if query.device.type == "npu":
+        return F.scaled_dot_product_attention(
+            query,
+            key,
+            value,
+            attn_mask=attention_mask,
+            scale=softmax_scale,
+            enable_gqa=True,
+        )
+
+    repeats = query.size(-3) // key.size(-3)
+    key = key.repeat_interleave(repeats, -3)
+    value = value.repeat_interleave(repeats, -3)
+    return F.scaled_dot_product_attention(
+        query, key, value, attn_mask=attention_mask, scale=softmax_scale
+    )
+
+
 class BooguImageDoubleStreamSelfAttnProcessorFlash2Varlen(nn.Module):
     """
     Double-stream self-attention processor with flash attention and variable length sequences.
@@ -824,8 +858,9 @@ class BooguImageDoubleStreamSelfAttnProcessor(nn.Module):
         if joint_attention_mask is not None:
             joint_attention_mask = joint_attention_mask.bool()
             if joint_attention_mask.dim() == 2:
-                # Standard mask [B, seq_len] -> [B, 1, 1, seq_len]
-                joint_attention_mask = joint_attention_mask.view(batch_size, 1, 1, -1)
+                joint_attention_mask = _prepare_sdpa_padding_mask(
+                    joint_attention_mask, batch_size, query.shape[1]
+                )
             elif joint_attention_mask.dim() == 3:
                 # Causal mask [B, seq_len, seq_len] -> [B, 1, seq_len, seq_len]
                 joint_attention_mask = joint_attention_mask.unsqueeze(1)
@@ -838,12 +873,8 @@ class BooguImageDoubleStreamSelfAttnProcessor(nn.Module):
         key = key.transpose(1, 2)
         value = value.transpose(1, 2)
 
-        # explicitly repeat key and value to match query length, otherwise using enable_gqa=True results in MATH backend of sdpa in our test of pytorch2.6
-        key = key.repeat_interleave(query.size(-3) // key.size(-3), -3)
-        value = value.repeat_interleave(query.size(-3) // value.size(-3), -3)
-
-        hidden_states = F.scaled_dot_product_attention(
-            query, key, value, attn_mask=joint_attention_mask, scale=softmax_scale
+        hidden_states = _scaled_dot_product_attention(
+            query, key, value, joint_attention_mask, softmax_scale
         )
         hidden_states = hidden_states.transpose(1, 2).reshape(
             batch_size, -1, attn.heads * head_dim
@@ -1228,8 +1259,9 @@ class BooguImageAttnProcessor:
         if attention_mask is not None:
             attention_mask = attention_mask.bool()
             if attention_mask.dim() == 2:
-                # Standard padding mask [B, L] -> [B, 1, 1, L]
-                attention_mask = attention_mask.view(batch_size, 1, 1, -1)
+                attention_mask = _prepare_sdpa_padding_mask(
+                    attention_mask, batch_size, query.shape[1]
+                )
             elif attention_mask.dim() == 3:
                 # Robust causal + padding mask construction
                 # Infer valid lengths from diagonal, then build lower-triangular mask within valid lengths
@@ -1256,12 +1288,8 @@ class BooguImageAttnProcessor:
         key = key.transpose(1, 2)
         value = value.transpose(1, 2)
 
-        # explicitly repeat key and value to match query length, otherwise using enable_gqa=True results in MATH backend of sdpa in our test of pytorch2.6
-        key = key.repeat_interleave(query.size(-3) // key.size(-3), -3)
-        value = value.repeat_interleave(query.size(-3) // value.size(-3), -3)
-
-        hidden_states = F.scaled_dot_product_attention(
-            query, key, value, attn_mask=attention_mask, scale=softmax_scale
+        hidden_states = _scaled_dot_product_attention(
+            query, key, value, attention_mask, softmax_scale
         )
         hidden_states = hidden_states.transpose(1, 2).reshape(
             batch_size, -1, attn.heads * head_dim

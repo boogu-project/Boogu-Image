@@ -1,0 +1,12 @@
+# Tested with CANN 9.0.0, Python 3.12, and aarch64.
+# Use the PTA versions required by your CANN release when they differ.
+torch==2.10.0
+torch-npu==2.10.0
+accelerate>=1.0
+diffusers[torch]>=0.35.2,<0.39
+einops>=0.7
+numpy>=1.26
+pillow>=10
+safetensors>=0.4
+scipy>=1.11
+transformers[torch]>=4.57.3,<6

@@ -241,6 +241,20 @@ python inference.py \
   --device "$device"
 ```
 
+### Ascend NPU BF16 推理
+
+Base、Turbo、Edit 和 Edit-Turbo 的 BF16 权重统一使用单卡 NPU 入口：
+
+```bash
+ASCEND_RT_VISIBLE_DEVICES=0 python inference_npu.py \
+  --device npu:0 \
+  --model models/Boogu-Image-0.1-Turbo \
+  --output outputs/turbo_npu.png
+```
+
+环境配置、图像编辑、权重校验、缓存加速、CPU offload 以及在 NPU 上复用
+`demo_scripts/` 的方式请参考 [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md)。
+
 ### 硬件说明
 
 > 📖 完整的命令行选项、设备设置、卸载策略、缓存加速、Torch Compile、FP8 和批量推理详情，请参阅 [**INFERENCE_GUIDE.md**](./INFERENCE_GUIDE.md)。

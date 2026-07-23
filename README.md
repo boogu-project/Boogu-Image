@@ -237,6 +237,22 @@ python inference.py \
   --device "$device"
 ```
 
+### Ascend NPU BF16 Inference
+
+Use the unified single-card NPU entry point for Base, Turbo, Edit, and
+Edit-Turbo BF16 checkpoints:
+
+```bash
+ASCEND_RT_VISIBLE_DEVICES=0 python inference_npu.py \
+  --device npu:0 \
+  --model models/Boogu-Image-0.1-Turbo \
+  --output outputs/turbo_npu.png
+```
+
+See [NPU_INFERENCE_GUIDE.md](./NPU_INFERENCE_GUIDE.md) for environment setup,
+image editing, checkpoint validation, cache acceleration, CPU offload, and the
+shared `demo_scripts/` usage on NPU.
+
 ### Hardware Notes
 
 > 📖 For full CLI options, device setup, offload strategies, caching acceleration, Torch Compile, FP8, and batch inference details, see [**INFERENCE_GUIDE.md**](./INFERENCE_GUIDE.md).
