@@ -206,7 +206,7 @@ class BooguImageTransformerBlock(nn.Module):
         self.head_dim = dim // num_attention_heads
         self.modulation = modulation
 
-        if "cpu" in os.getenv("device", "cpu"):
+        if "cpu" in os.getenv("device", "cpu") or "mps" == os.getenv("device", ""):
             processor = BooguImageAttnProcessor()
 
         else:
@@ -416,7 +416,7 @@ class BooguImageDoubleStreamTransformerBlock(nn.Module):
         self.modulation = modulation
         self.hidden_size = dim
 
-        if "cpu" in os.getenv("device", "cpu"):
+        if "cpu" in os.getenv("device", "cpu") or "mps" == os.getenv("device", ""):
             processor = BooguImageAttnProcessor()
         else:
             try:
@@ -424,7 +424,7 @@ class BooguImageDoubleStreamTransformerBlock(nn.Module):
             except ImportError:
                 processor = BooguImageAttnProcessor()
 
-        if "cpu" in os.getenv("device", "cpu"):
+        if "cpu" in os.getenv("device", "cpu") or "mps" == os.getenv("device", ""):
             double_stream_processor = BooguImageDoubleStreamSelfAttnProcessor(
                 head_dim=self.head_dim,
                 num_attention_heads=num_attention_heads,

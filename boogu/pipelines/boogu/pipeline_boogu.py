@@ -271,8 +271,8 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
 
     def _validate_device_format(
         self,
-        device: Literal[None, "cpu", "cuda", "cuda:x"] = "cpu",
-        rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto"] = "cpu",
+        device: Literal[None, "cpu", "cuda", "cuda:x", "mps"] = "cpu",
+        rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto", "mps"] = "cpu",
     ):
         device = device.lower() if isinstance(device, str) else device
         rewriter_device = (
@@ -294,8 +294,8 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
         enable_model_cpu_offload_flag: bool = None,
         enable_sequential_cpu_offload_flag: bool = None,
         enable_group_offload_flag: bool = None,
-        rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto"] = None,
-        device: Literal[None, "cpu", "cuda", "cuda:x"] = None,
+        rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto", "mps"] = None,
+        device: Literal[None, "cpu", "cuda", "cuda:x", "mps"] = None,
         use_rewrite_text_instruction: bool = False,
         use_dashscope_remote_rewriting: bool = False,
         dashscope_api_key: str = None,
@@ -377,11 +377,11 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
 
     def devices_manager(
         self,
-        instant_device_2_use: Literal[None, "cpu", "cuda", "cuda:x"] = None,
-        instant_rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto"] = None,
-        user_set_pipe_device: Literal[None, "cpu", "cuda", "cuda:x"] = None,
-        user_set_rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto"] = None,
-        execution_device: Literal[None, "cpu", "cuda", "cuda:x"] = None,
+        instant_device_2_use: Literal[None, "cpu", "cuda", "cuda:x", "mps"] = None,
+        instant_rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto", "mps"] = None,
+        user_set_pipe_device: Literal[None, "cpu", "cuda", "cuda:x", "mps"] = None,
+        user_set_rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto", "mps"] = None,
+        execution_device: Literal[None, "cpu", "cuda", "cuda:x", "mps"] = None,
         unload_rewriter_level: Literal["keep", "cpu", "destroy"] = "destroy",
         enable_model_cpu_offload_flag: bool = None,
         enable_sequential_cpu_offload_flag: bool = None,
@@ -2716,11 +2716,18 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
         return_dict: bool = True,
         verbose: bool = False,
         step_func=None,
-        device: Literal[None, "cpu", "cuda", "cuda:x"] = "cuda",
-        rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto"] = "cpu",
+        device: Literal[None, "cpu", "cuda", "cuda:x", "mps"] = None,
+        rewriter_device: Literal[None, "cpu", "cuda", "cuda:x", "auto", "mps"] = "cpu",
         unload_rewriter_level: Literal["keep", "cpu", "destroy"] = "destroy",
         enable_inner_devices_manager: bool = False,
     ):
+
+        if device is None:
+            device = str(self._execution_device)
+        if device.startswith("mps"):
+            device = "mps"
+        elif device == "cuda:0":
+            device = "cuda"
 
         if enable_inner_devices_manager is not None:
             self.enable_inner_devices_manager = enable_inner_devices_manager

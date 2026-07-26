@@ -158,6 +158,28 @@ class BooguImageTurboPipeline(BooguImagePipeline):
         dtype = kwargs["dtype"]
         step_func = kwargs.get("step_func", None)
 
+        # Workaround for MPS backend: `@torch.no_grad()` triggers an MPS Graph
+        # assertion during transformer forward. Enabling grad bypasses the bug.
+        mps_no_grad_workaround = not torch.is_grad_enabled() and str(latents.device).startswith("mps")
+        if mps_no_grad_workaround:
+            torch.set_grad_enabled(True)
+
+        try:
+            return self._dmd_processing(
+                latents, ref_latents, instruction_embeds, freqs_cis,
+                instruction_attention_mask, num_inference_steps,
+                timesteps, device, dtype, step_func,
+            )
+        finally:
+            if mps_no_grad_workaround:
+                torch.set_grad_enabled(False)
+
+    def _dmd_processing(
+        self,
+        latents, ref_latents, instruction_embeds, freqs_cis,
+        instruction_attention_mask, num_inference_steps,
+        timesteps, device, dtype, step_func,
+    ):
         # --- DMD constraints (mirror the standalone turbo pipeline) ---
         task_type = self._get_task_type_by_ref_latents(ref_latents)
         if (

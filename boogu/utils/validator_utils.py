@@ -7,7 +7,7 @@ def get_device_validator(additional_types: Optional[List[str]] = None):
     """
     Factory function that returns a validator for device arguments.
 
-    Base supported formats: 'cpu', 'cuda', or 'cuda:x' (where x is an integer).
+    Base supported formats: 'cpu', 'cuda', 'cuda:x' (where x is an integer), or 'mps'.
     Additional formats can be provided via `additional_types` (e.g., ['auto']).
     """
     # Initialize as an empty list if None is provided
@@ -27,7 +27,7 @@ def get_device_validator(additional_types: Optional[List[str]] = None):
         # ^ and $ ensure the entire string is matched
         # (cpu|cuda) matches these exact words
         # |cuda:\d+ matches 'cuda:' followed by one or more digits (\d+)
-        if re.match(r"^(cpu|cuda|cuda:\d+)$", value):
+        if re.match(r"^(cpu|cuda|cuda:\d+|mps)$", value):
             return value
 
         # Check if the value is in the additionally allowed types (e.g., 'auto')
@@ -36,7 +36,7 @@ def get_device_validator(additional_types: Optional[List[str]] = None):
 
         # If it doesn't match any allowed format, raise ArgumentTypeError.
         # argparse will automatically catch this and print a user-friendly error message.
-        allowed_msg = "'cpu', 'cuda', 'cuda:x' (where x is an integer like 'cuda:0')"
+        allowed_msg = "'cpu', 'cuda', 'cuda:x' (where x is an integer like 'cuda:0'), or 'mps'"
         if additional_types:
             allowed_msg += f", or one of {additional_types}"
 
@@ -87,7 +87,7 @@ def validate_device_and_offload_strategy_compatibility(
         return False
 
     device = str(device).strip().lower()
-    if not re.match(r"^(cpu|cuda|cuda:\d+)$", device):
+    if not re.match(r"^(cpu|cuda|cuda:\d+|mps)$", device):
         return False
 
     # CPU offload strategies need a non-CPU execution device to be meaningful.
