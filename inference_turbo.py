@@ -448,8 +448,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--dashscope_api_key",
         type=str,
-        default="sk-xxxxxxxxxxxxxxxxxxxxxxxxxx",
-        help="The api key for dashscope. Only takes effect when `use_rewrite_text_instruction` is True and `use_dashscope_remote_rewriting` is True.",
+        default=None,
+        help="The api key for dashscope. Only takes effect when `use_rewrite_text_instruction` is True and `use_dashscope_remote_rewriting` is True. Must be set to a valid key when `use_dashscope_remote_rewriting=True`; the pipeline will assert and refuse to run with the placeholder value.",
     )
 
     parser.add_argument(

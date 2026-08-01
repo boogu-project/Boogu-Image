@@ -234,19 +234,8 @@ class FlowMatchEulerDiscreteScheduler(SchedulerMixin, ConfigMixin):
 
             timesteps = t_arr
 
-        # ######################debug############################
-        # print(f">> time_shift_version:  {self.config.time_shift_version}")
-        # print(f">> timesteps:  {timesteps}")
-        # print(f">> self.time_shift_v2_scaling_factor:  {self.time_shift_v2_scaling_factor}")
-        # #######################################################
-
         timesteps = torch.from_numpy(timesteps).to(dtype=torch.float32, device=device)
         _timesteps = torch.cat([timesteps, torch.ones(1, device=timesteps.device)])
-
-        # ######################debug############################
-        # print(f">> len _timesteps:  {len(_timesteps)}")
-        # print(f">> _timesteps:  {_timesteps}")
-        # #######################################################
 
         self.timesteps = timesteps
         self._timesteps = _timesteps
