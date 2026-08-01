@@ -148,7 +148,7 @@ conda create -y -n boogu python=3.10
 conda activate boogu
 # 安装必要的依赖
 # 支持 PyTorch 最高 2.11.0，CUDA 最高 12.8
-# 查看 `requirements/<torch>_<cuda>.txt`
+# 查看 `requirements/<torch>-<cuda>.txt`，例如 `requirements/torch2.7-cu126.txt`
 pip install -r requirements/torch2.7-cu126.txt
 pip install -e .
 python utils/get_flash_attn.py
@@ -158,7 +158,9 @@ python utils/get_flash_attn.py
 
 ```bash
 bash quick_start.sh
-conda activate boogu
+# 如果 boogu 已存在，quick_start.sh 可能自动创建 boogu1/boogu2...
+# 请使用 quick_start.sh 结束时打印出的激活命令
+conda activate <quick_start.sh输出的环境名>
 ```
 
 ### 下载模型权重
@@ -172,6 +174,7 @@ pip install -U "huggingface_hub[cli]"
 huggingface-cli download Boogu/Boogu-Image-0.1-Base --local-dir models/Boogu-Image-0.1-Base
 huggingface-cli download Boogu/Boogu-Image-0.1-Turbo --local-dir models/Boogu-Image-0.1-Turbo
 huggingface-cli download Boogu/Boogu-Image-0.1-Edit --local-dir models/Boogu-Image-0.1-Edit
+huggingface-cli download Boogu/Boogu-Image-0.1-Edit-Turbo --local-dir models/Boogu-Image-0.1-Edit-Turbo
 ```
 
 下载后的目录结构示例：
@@ -187,7 +190,7 @@ models/
     └── vae
 ```
 
-然后通过 `--model models/Boogu-Image-0.1-Base` 指向本地路径进行推理。
+然后通过 `--pretrained_pipeline_name_or_path models/Boogu-Image-0.1-Base` 指向本地路径进行推理。
 
 ### Flash Attention
 

@@ -44,7 +44,15 @@ use_rewrite_text_instruction=True
 use_dashscope_remote_rewriting=True
 dashscope_remote_rewriting_model="qwen-vl-max-latest"
 dashscope_base_http_api_url="https://dashscope.aliyuncs.com/api/v1"
-dashscope_api_key="sk-xxxxxxxxxxxxxxxxxxxxxxxxxx"
+# Read the DashScope API key from the environment instead of hardcoding a placeholder.
+# Export it before running this script, e.g.:
+#   export DASHSCOPE_API_KEY="sk-your-real-key-here"
+if [ -z "${DASHSCOPE_API_KEY:-}" ]; then
+    echo "Error: DASHSCOPE_API_KEY is not set. Export it before running this script, e.g.:" >&2
+    echo "  export DASHSCOPE_API_KEY=\"sk-your-real-key-here\"" >&2
+    exit 1
+fi
+dashscope_api_key="${DASHSCOPE_API_KEY}"
 
 save_rewritten_instruction=True
 save_rewritten_instruction_path="outputs/${experiment_name}/${case_name}_rewritten_instruction.json"

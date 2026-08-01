@@ -1,10 +1,13 @@
 # Boogu Inference Guide
 
-This document describes the current Boogu inference entry point for
-text-to-image (T2I) generation and text/image-to-image (TI2I) editing:
+This document describes the Boogu inference entry points:
+
+- `inference.py` for Base/Edit models (T2I and TI2I)
+- `inference_turbo.py` for Turbo/Edit-Turbo models
 
 ```bash
 inference.py
+inference_turbo.py
 ```
 
 Many ready-to-run examples are available in:
@@ -20,6 +23,19 @@ and editing, while scripts whose names contain `reasoning` show how to enable
 the built-in instruction reasoner / rewriter. For most users, the fastest way to
 start is to copy one of these scripts and adjust only the model path, prompt,
 input image paths, device settings, and output name.
+
+Minimal Turbo example:
+
+```bash
+export device="cuda:0"
+
+python inference_turbo.py \
+  --pretrained_pipeline_name_or_path "models/Boogu-Image-0.1-Turbo" \
+  --instruction "A scenic mountain landscape in warm golden light" \
+  --height 1024 --width 1024 \
+  --output_image_path "outputs/test_turbo/out_1.png" \
+  --device "$device"
+```
 
 Most demo scripts also set:
 

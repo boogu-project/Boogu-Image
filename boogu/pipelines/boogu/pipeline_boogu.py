@@ -2078,7 +2078,7 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
         ori_text: Union[str, List[str]],
         input_image_paths: Optional[Union[List[List[str]], List[str]]] = None,
         dashscope_base_http_api_url: str = "https://dashscope.aliyuncs.com/api/v1",
-        dashscope_api_key: str = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        dashscope_api_key: Optional[str] = None,
         remote_model: str = "qwen-vl-max-latest",
         MAX_TRIES: int = 3,
     ) -> List[str]:
@@ -2152,7 +2152,7 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
         use_dashscope_remote_rewriting: bool = False,
         dashscope_remote_rewriting_model: str = "qwen-vl-max-latest",
         dashscope_base_http_api_url: str = "https://dashscope.aliyuncs.com/api/v1",
-        dashscope_api_key: str = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        dashscope_api_key: Optional[str] = None,
     ):
 
         max_images_per_sample = 0
@@ -2287,7 +2287,7 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
         use_dashscope_remote_rewriting: bool = False,
         dashscope_remote_rewriting_model: str = "qwen-vl-max-latest",
         dashscope_base_http_api_url: str = "https://dashscope.aliyuncs.com/api/v1",
-        dashscope_api_key: str = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        dashscope_api_key: Optional[str] = None,
         system_prompt_follows_task_type: bool = False,
         task_type: str = "ti2i",
     ) -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
@@ -2695,7 +2695,7 @@ class BooguImagePipeline(DiffusionPipeline, BooguImageLoraLoaderMixin):
         use_dashscope_remote_rewriting: bool = False,
         dashscope_remote_rewriting_model: str = "qwen-vl-max-latest",
         dashscope_base_http_api_url: str = "https://dashscope.aliyuncs.com/api/v1",
-        dashscope_api_key: str = "sk-xxxxxxxxxxxxxxxxxxxxxxxxxx",
+        dashscope_api_key: Optional[str] = None,
         system_prompt_follows_task_type: bool = False,
         ### Momentum Config
         use_boosted_orthogonal_guidance: bool = False,

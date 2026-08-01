@@ -143,7 +143,7 @@ conda create -y -n boogu python=3.10
 conda activate boogu
 # Instal necessary dependencies
 # PyTorch up to 2.11.0 with CUDA up to 12.8 is supported
-# Check `requirements/<torch>_<cuda>.txt`
+# Check `requirements/<torch>-<cuda>.txt`, for example `requirements/torch2.7-cu126.txt`
 pip install -r requirements/torch2.7-cu126.txt
 pip install -e .
 python utils/get_flash_attn.py
@@ -153,7 +153,9 @@ or
 
 ```bash
 bash quick_start.sh
-conda activate boogu
+# quick_start.sh may create boogu1/boogu2... if boogu already exists
+# Use the exact command printed at the end of quick_start.sh
+conda activate <env_name_printed_by_quick_start>
 ```
 
 ### Download Checkpoints
@@ -183,7 +185,7 @@ models/
     └── vae
 ```
 
-Then point inference to the local path via `--model models/Boogu-Image-0.1-Base`.
+Then point inference to the local path via `--pretrained_pipeline_name_or_path models/Boogu-Image-0.1-Base`.
 
 ### Flash Attention
 
